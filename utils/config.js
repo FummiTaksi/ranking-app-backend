@@ -1,10 +1,11 @@
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config()
-    console.log("EN OLE TUOTANNOSS!")
 }
 
 let PORT = process.env.PORT
+let MONGOLAB_URL = process.env.MONGOLAB_URL
 
 module.exports = {
-    PORT
+    PORT,
+    MONGOLAB_URL
 }
