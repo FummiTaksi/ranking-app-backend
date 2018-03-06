@@ -7,7 +7,7 @@ const http = require('http')
 app.get('/', (req, res) => {
   res.send('<h1>Hello World!</h1>')
 })
-
+console.log('CONNECTING to ',config.MONGOLAB_URL)
 mongoose.connect(config.MONGOLAB_URL)
 mongoose.Promise = global.Promise
 
