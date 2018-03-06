@@ -5,7 +5,7 @@ const mongoose = require('mongoose')
 const http = require('http')
 
 app.get('/', (req, res) => {
-    res.send('<h1>Hello World!</h1>')
+  res.send('<h1>Hello World!</h1>')
 })
 
 mongoose.connect(config.MONGOLAB_URL)
