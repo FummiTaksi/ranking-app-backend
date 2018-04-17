@@ -12,7 +12,7 @@ describe('/api/login', async() => {
       password: 'ASF'
     }
     await api
-      .post('/api/notes')
+      .post('/api/login')
       .expect(403)
       .send(credentials)
       .expect('Content-Type', /application\/json/)
