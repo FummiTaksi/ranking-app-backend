@@ -3,11 +3,17 @@ const app = express()
 const config = require('./utils/config')
 const mongoose = require('mongoose')
 const http = require('http')
+const bodyParser = require('body-parser')
 
+const loginRouter = require('./controllers/login')
+
+app.use(bodyParser.json())
+app.use(express.static('build'))
+app.use('/api/login', loginRouter)
 app.get('/', (req, res) => {
   res.send('<h1>Hello World!</h1>')
 })
-
+console.log('CONNECTING to ',config.MONGOLAB_URL)
 mongoose.connect(config.MONGOLAB_URL)
 mongoose.Promise = global.Promise
 
