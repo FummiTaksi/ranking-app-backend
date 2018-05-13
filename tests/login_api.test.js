@@ -1,6 +1,7 @@
 const supertest = require('supertest')
 const { app, server } = require('../index')
 const User = require('../models/user')
+const userService = require('../services/user')
 const api = supertest(app)
 
 
@@ -11,18 +12,16 @@ beforeAll(async () => {
 beforeEach(async () => {
   const user = {
     username: 'TestUser',
-    password: 'password',
-    admin: false
+    password: 'password'
   }
-  const userObject = new User(user)
-  userObject.save()
+  await userService.createAdmin(user)
 })
 
 describe('/api/login', async() => {
 
   test('with wrong credentials, access is denied', async () => {
     const credentials = {
-      username: 'JokuUkko',
+      username: 'TestUser',
       password: 'ASF'
     }
     await api
