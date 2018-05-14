@@ -1,27 +1,19 @@
 const supertest = require('supertest')
 const { app, server } = require('../index')
-const User = require('../models/user')
-const userService = require('../services/user')
+const seeder = require('../db/seeds')
 const api = supertest(app)
 
 
-beforeAll(async () => {
-  await User.remove({})
-})
 
-beforeEach(async () => {
-  const user = {
-    username: 'TestUser',
-    password: 'password'
-  }
-  await userService.createAdmin(user)
+beforeAll(async () => {
+  await seeder.seedAdminToDataBase()
 })
 
 describe('/api/login', async() => {
 
   test('with wrong credentials, access is denied', async () => {
     const credentials = {
-      username: 'TestUser',
+      username: process.env.ADMIN_USERNAME,
       password: 'ASF'
     }
     await api
@@ -33,18 +25,14 @@ describe('/api/login', async() => {
 
   test('with correct credentials, login is successfull', async() => {
     const credentials = {
-      username: 'TestUser',
-      password: 'password'
+      username: process.env.ADMIN_USERNAME,
+      password: process.env.ADMIN_PASSWORD
     }
     await api
       .post('/api/login')
       .send(credentials)
       .expect(200)
   })
-})
-
-afterEach(async () => {
-  await User.remove({})
 })
 
 

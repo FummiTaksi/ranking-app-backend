@@ -5,6 +5,8 @@ const mongoose = require('mongoose')
 const http = require('http')
 const bodyParser = require('body-parser')
 
+const seeder = require('./db/seeds')
+
 const loginRouter = require('./controllers/login')
 
 app.use(bodyParser.json())
@@ -16,6 +18,13 @@ app.get('/', (req, res) => {
 console.log('CONNECTING to ',config.MONGOLAB_URL)
 mongoose.connect(config.MONGOLAB_URL)
 mongoose.Promise = global.Promise
+
+
+// Data array containing seed data - documents organized by Model
+if (process.env.NODE_ENV !== 'test') {
+  seeder.seedAdminToDataBase()
+  console.log('DATABASE SEEDED')
+}
 
 const PORT = config.PORT
 
