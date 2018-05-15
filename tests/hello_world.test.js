@@ -5,6 +5,7 @@ const seeder = require('../db/seeds')
 const api = supertest(app)
 
 beforeAll(async() => {
+  await User.remove({})
   await seeder.seedAdminToDataBase()
 })
 
