@@ -12,27 +12,35 @@ beforeAll(async () => {
 describe('/api/login', async() => {
 
   test('with wrong credentials, access is denied', async () => {
-    const credentials = {
+    const wrongCredentials = {
       username: process.env.ADMIN_USERNAME,
       password: 'ASF'
     }
     await api
       .post('/api/login')
-      .send(credentials)
+      .send(wrongCredentials)
       .expect(403)
       .expect('Content-Type', /application\/json/)
   })
-
-  test('with correct credentials, login is successfull', async() => {
-    const credentials = {
+  describe('with correct credentials ', async() => {
+    let correctCredentials = {
       username: process.env.ADMIN_USERNAME,
       password: process.env.ADMIN_PASSWORD
     }
-    await api
-      .post('/api/login')
-      .send(credentials)
-      .expect(200)
+    test(' status is 200', async() => {
+      await api
+        .post('/api/login')
+        .send(correctCredentials)
+        .expect(200)
+    })
+    test(' admin status is returned', async() => {
+      const response = await api.post('/api/login').send(correctCredentials)
+      console.log('RESPONSE.admin',response)
+      expect(response.body.admin).toBe(true)
+    })
   })
+
+
 })
 
 
