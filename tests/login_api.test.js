@@ -35,7 +35,6 @@ describe('/api/login', async() => {
     })
     test(' admin status is returned', async() => {
       const response = await api.post('/api/login').send(correctCredentials)
-      console.log('RESPONSE.admin',response)
       expect(response.body.admin).toBe(true)
     })
   })
