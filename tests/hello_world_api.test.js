@@ -7,6 +7,7 @@ const api = supertest(app)
 beforeAll(async() => {
   await User.remove({})
   await seeder.seedAdminToDataBase()
+  console.log('SEEDED IN HELLO WORLD')
 })
 
 describe('When app is running', async() => {
@@ -27,4 +28,5 @@ describe('When app is running', async() => {
 
 afterAll(() => {
   server.close()
+  console.log('HELLO WORLD END')
 })
