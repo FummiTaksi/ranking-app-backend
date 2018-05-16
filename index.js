@@ -22,9 +22,8 @@ mongoose.Promise = global.Promise
 
 // Data array containing seed data - documents organized by Model
 if (process.env.NODE_ENV !== 'test') {
-  seeder.seedAdminToDataBase().then(response => {
-    console.log('DATABASE SEEDED:',response)
-  })
+  seeder.seedAdminToDataBase()
+  console.log('DATABASE SEEDED')
 }
 
 const PORT = config.PORT
