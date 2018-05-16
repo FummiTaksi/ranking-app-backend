@@ -3,8 +3,3 @@ node_js:
   - "9"
 services: mongodb
 
-deploy:
-  provider: heroku
-  app: tabletennis-ranking-app
-  api_key:
-    secure: process.env.HEROKU_API_KEY
