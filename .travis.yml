@@ -2,4 +2,8 @@ language: node_js
 node_js:
   - "9"
 services: mongodb
-
+deploy:
+  provider: heroku
+  app: tabletennis-ranking-app
+  api_key:
+    secure: "eYshrk2nXc2zKYAlv2/RD46dXSflpfMzGie/2dpGYnBQiEsZa3JO6p2gR+zMQEGn+xcSBvLTmddjShLc2L9UgwV+j4tqrSGppRtGXE+dlF816hDEgUW+AwtKTUDy4gPULAA893F81N5fHZbK1xw03lJDf9bFvd7SvqDm15nKO+dtx8cNrxkdUcIW49sudT3U+j7T3+b0DvyOk/cNM1j4UvTJmM6ofaQbzI16FqHLAHG9jERXIVajeeuSxhO5s4qNu00/F1NC862yrf0vn4ICa74bQbUL+rW5W3nL4cVoJ58yBqelzWWIuocKIYYALFni3pNnYir1hIvK7kfl8boNzqOEy0Ze+KBsKzP44PTfDc1dFTlhh3wQJ31onhOudMfilwpmS6LjV7dzC4vuDwyNJAppCEw/chsSKcaAkyZActl5A/4EBMEWqH7/1yW8l0CIg9lRmSG4/e3S+Duw+lgZkcPnx7Csr2/bUQ9cuGsK11lqzINneMq3DI/H4xC1x+vJCO50dE4Lgp7PJhrCz8lZ/XrZiw32fxcOACvAgv7dtEnVpyurQna44OYES6uWb8lWyI/XO3fDmUZRafGb9xUt0fHc37x647cnIzcbXzPpMtYsDwPgERDzOEGbN7pa8VRHDSay5bfDoqN3iEKQCmP0UPrpwjjpbNGFwSf45CmL2vg="
