@@ -6,6 +6,8 @@ const fileService = require('../services/fileService')
 rankingRouter.post('/new', async (request, response) => {
   try {
     const token = request.token
+    const body = request.body
+    console.log('BODY',body.rankingName)
     const decodedToken = jwt.verify(token, process.env.SECRET)
     if (!token || !decodedToken.id) {
       return response.status(401).json(getAccessDeniedMessage())
@@ -14,8 +16,7 @@ rankingRouter.post('/new', async (request, response) => {
     if (!userWhoAddedRanking.admin) {
       return response.status(401).json(getAccessDeniedMessage())
     }
-    fileService.convertBlobToBase64(request.body.file)
-
+    fileService.convertBase64ToExcel(body.rankingFileBase64)
     return response.status(200).json({ message: 'All is good' })
   }
   catch(error) {
