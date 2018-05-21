@@ -1,7 +1,13 @@
-const convertBlobToBase64 = (blob) => {
-  const buffer = new Buffer( blob.preview )
-  const bufferBase64 = buffer.toString('base64')
-  console.log('base64', bufferBase64)
+const fs = require('fs')
+const xlsx = require('xlsx')
+//const FileReader = require('filereader')
+
+
+const convertBase64ToExcel = (base64String) => {
+  console.log('convert base64:sta exceliin...')
+  const buffer = Buffer.from(base64String, 'base64')
+  const xls = xlsx.read(buffer)
+  //console.log('xls.Sheets',xls.Sheets)
 }
 
-module.exports = { convertBlobToBase64 }
+module.exports = { convertBase64ToExcel }
