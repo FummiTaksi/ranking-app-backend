@@ -13,7 +13,9 @@ const rankingRouter = require('./controllers/ranking')
 
 const middlewares = require('./middlewares/middlewares')
 
-app.use(bodyParser.json())
+//app.use(bodyParser.json())
+app.use(bodyParser.json({ limit: '1000mb' }))
+app.use(bodyParser.urlencoded({ limit: '1000mb' , extended: true }))
 app.use(express.static('build'))
 app.use(middlewares.tokenExtractor)
 app.use(morgan('tiny'))
