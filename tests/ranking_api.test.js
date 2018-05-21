@@ -4,7 +4,7 @@ const api = supertest(app)
 
 describe('/api/ranking ', async() => {
   describe('/new', async() => {
-    test(' returns 500 if token is not correct', async() => {
+    test(' returns 400 if token is not correct', async() => {
       const wrongCredentials = {
         file: undefined,
         name: 'Test Rank'
@@ -13,7 +13,7 @@ describe('/api/ranking ', async() => {
         .post('/api/ranking/new')
         .send(wrongCredentials)
         .set('Authorization', 'bearer xdlsdjuna')
-        .expect(500)
+        .expect(400)
     })
   })
 })
