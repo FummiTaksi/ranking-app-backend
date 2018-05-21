@@ -4,14 +4,21 @@ const config = require('./utils/config')
 const mongoose = require('mongoose')
 const http = require('http')
 const bodyParser = require('body-parser')
+const morgan = require('morgan')
 
 const seeder = require('./db/seeds')
 
 const loginRouter = require('./controllers/login')
+const rankingRouter = require('./controllers/ranking')
+
+const middlewares = require('./middlewares/middlewares')
 
 app.use(bodyParser.json())
 app.use(express.static('build'))
+app.use(middlewares.tokenExtractor)
+app.use(morgan('tiny'))
 app.use('/api/login', loginRouter)
+app.use('/api/ranking', rankingRouter)
 app.get('/', (req, res) => {
   res.send('<h1>Hello World!</h1>')
 })
