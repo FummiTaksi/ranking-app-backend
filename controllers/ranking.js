@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken')
 const rankingRouter= require('express').Router()
 const User = require('../models/user')
 const fileService = require('../services/fileService')
+const rankingService = require('../services/rankingService')
 
 rankingRouter.post('/new', async (request, response) => {
   try {
@@ -16,7 +17,8 @@ rankingRouter.post('/new', async (request, response) => {
     if (!userWhoAddedRanking.admin) {
       return response.status(401).json(getAccessDeniedMessage())
     }
-    fileService.convertBase64ToExcel(body.rankingFileBase64)
+    const json = fileService.convertBase64ToExcel(body.rankingFileBase64)
+    rankingService.saveRankingToDatabase(json)
     return response.status(200).json({ message: 'All is good' })
   }
   catch(error) {
