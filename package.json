@@ -8,8 +8,8 @@
     "watch": "nodemon index.js",
     "test": "npm-run-all test:unit test:e2e",
     "test:unit": "NODE_ENV=test jest --verbose --runInBand --forceExit tests/",
-    "test:e2e": "NODE_ENV=test TEST_PORT=3003 npm-run-all --parallel start test:e2e:runner",
-    "test:e2e:runner": "jest e2e/",
+    "test:e2e": "NODE_ENV=test TEST_PORT=3003 npm-run-all --parallel --race start test:e2e:runner",
+    "test:e2e:runner": "jest --forceExit e2e/",
     "lint": "eslint ."
   },
   "author": "Aleksi Mustonen",
