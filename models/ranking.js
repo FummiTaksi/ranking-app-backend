@@ -1,22 +1,17 @@
 const mongoose = require('mongoose')
 
 const rankingSchema = new mongoose.Schema({
-  nameOfCompetition: {
+  competitionName: {
     type: String,
     required: true
   },
   date: {
     type: Date,
     required: true
-  }
+  },
+  positions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Position' }]
 })
 
-const Ranking = mongoose.model('Ranking', {
-  nameOfCompetition: String,
-  date: Date,
-  positions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Position' }]
-},rankingSchema)
-
-
+const Ranking = mongoose.model('Ranking', rankingSchema)
 
 module.exports = Ranking
