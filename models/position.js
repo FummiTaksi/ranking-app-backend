@@ -1,12 +1,5 @@
 const mongoose = require('mongoose')
 
-const Position = mongoose.model('Position', {
-  position: Number,
-  rating: Number,
-  playerName: String,
-  blog: { type: mongoose.Schema.Types.ObjectId, ref: 'Ranking' }
-}, positionSchema)
-
 const positionSchema = new mongoose.Schema({
   position: {
     type: Number,
@@ -21,8 +14,10 @@ const positionSchema = new mongoose.Schema({
   playerName: {
     type: String,
     required: true
-  }
-
+  },
+  ranking: { type: mongoose.Schema.Types.ObjectId, ref: 'Ranking' },
 })
+
+const Position = mongoose.model('Position', positionSchema)
 
 module.exports = Position
