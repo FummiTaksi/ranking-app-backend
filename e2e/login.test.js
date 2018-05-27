@@ -3,6 +3,7 @@ const User = require('../models/user')
 const seeder = require('../db/seeds')
 const config = require('../utils/config')
 const mongoose = require('mongoose')
+const { login }  = require('./helper')
 
 beforeAll(async () => {
   console.log('LOGIN TEST BEFOREALL ',config.MONGOLAB_URL)
@@ -28,7 +29,7 @@ describe('When user goest to login page ', async() => {
   })
 
   test(' and fills wrong credentials, login fails', async () => {
-    await login(process.env.ADMIN_USERNAME, 'wrongPassword')
+    await login(page, process.env.ADMIN_USERNAME, 'wrongPassword')
     await page.waitForSelector('.success')
     const textContent = await page.$eval('body', el => el.textContent)
     const includes = textContent.includes('Wrong username or password!')
@@ -36,18 +37,12 @@ describe('When user goest to login page ', async() => {
   },10000)
 
   test(' and fills correct credentials, login succeeds', async () => {
-    await login(process.env.ADMIN_USERNAME, process.env.ADMIN_PASSWORD)
+    await login(page, process.env.ADMIN_USERNAME, process.env.ADMIN_PASSWORD)
     await page.waitForSelector('.success')
     const textContent = await page.$eval('body', el => el.textContent)
     const includes = textContent.includes('Welcome back Admin!')
     expect(includes).toBe(true)
   },10000)
-
-  const login = async(username, password) => {
-    await page.type('input', username)
-    await page.type('input[type=password]', password)
-    await page.click('button')
-  }
 
   afterEach(async () => {
     await browser.close()
