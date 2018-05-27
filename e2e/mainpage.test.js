@@ -1,6 +1,6 @@
 const puppeteer = require('puppeteer')
 
-describe('When user visits main page ', async() => {
+describe('When user visits main page ', () => {
 
   test(' it contains welcome message', async () => {
     const browser = await puppeteer.launch({args: ['--no-sandbox']})

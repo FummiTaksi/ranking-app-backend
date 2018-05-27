@@ -10,7 +10,7 @@ beforeAll(async() => {
   console.log('SEEDED IN HELLO WORLD')
 })
 
-describe('When app is running', async() => {
+describe('When app is running', () => {
 
   test(' main route returns 200', async () => {
     await api

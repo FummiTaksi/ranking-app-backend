@@ -12,7 +12,7 @@ beforeAll(async () => {
   console.log('SEEDEED IN LOGIN_API')
 })
 
-describe('/api/login', async() => {
+describe('/api/login', () => {
 
   test('with wrong credentials, access is denied', async () => {
     const wrongCredentials = {

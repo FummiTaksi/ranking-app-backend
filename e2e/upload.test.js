@@ -13,7 +13,7 @@ beforeAll(async () => {
   await seeder.seedAdminToDataBase()
 })
 
-describe('When user goes to upload page ', async() => {
+describe('When user goes to upload page ', () => {
   let browser
   let page
   

@@ -2,8 +2,8 @@ const supertest = require('supertest')
 const { app, server } = require('../index')
 const api = supertest(app)
 
-describe('/api/ranking ', async() => {
-  describe('/new', async() => {
+describe('/api/ranking ', () => {
+  describe('/new', () => {
     test(' returns 400 if token is not correct', async() => {
       const wrongCredentials = {
         file: undefined,
