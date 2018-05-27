@@ -16,13 +16,13 @@ describe('When app is running', async() => {
     await api
       .get('/')
       .expect(200)
-  })
+  },10000)
 
   test(' admin is created successfully',async() => {
     const users = await User.find({})
     expect(users.length).toEqual(1)
     expect(users[0].username).toEqual(process.env.ADMIN_USERNAME)
-  })
+  },10000)
 })
 
 

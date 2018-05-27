@@ -14,7 +14,7 @@ describe('/api/ranking ', async() => {
         .send(wrongCredentials)
         .set('Authorization', 'bearer xdlsdjuna')
         .expect(400)
-    })
+    },10000)
   })
 })
 

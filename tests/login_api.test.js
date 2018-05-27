@@ -24,7 +24,7 @@ describe('/api/login', async() => {
       .send(wrongCredentials)
       .expect(403)
       .expect('Content-Type', /application\/json/)
-  })
+  },10000)
   describe('with correct credentials ', async() => {
     let correctCredentials = {
       username: process.env.ADMIN_USERNAME,
@@ -35,11 +35,11 @@ describe('/api/login', async() => {
         .post('/api/login')
         .send(correctCredentials)
         .expect(200)
-    })
+    },10000)
     test(' admin status is returned', async() => {
       const response = await api.post('/api/login').send(correctCredentials)
       expect(response.body.admin).toBe(true)
-    })
+    },10000)
   })
 
 
