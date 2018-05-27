@@ -5,7 +5,7 @@ const config = require('../utils/config')
 const mongoose = require('mongoose')
 
 beforeAll(async () => {
-  console.log('CONNECTING to ',config.MONGOLAB_URL)
+  console.log('LOGIN TEST BEFOREALL ',config.MONGOLAB_URL)
   mongoose.connect(config.MONGOLAB_URL)
   mongoose.Promise = global.Promise
   await User.remove({})
@@ -56,6 +56,8 @@ describe('When user goest to login page ', async() => {
 })
 
 afterAll( async () => {
+  console.log('LOGIN TEST AFTERALL')
   await User.remove({})
-  mongoose.connection.close()
+  await mongoose.connection.close()
+  console.log('LOGIN CONNECTION CLOSED!')
 })
