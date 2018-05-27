@@ -1,7 +1,8 @@
 const puppeteer = require('puppeteer')
 
-describe('When app is running', async() => {
-  test(' main page contains welcome message', async () => {
+describe('When user visits main page ', async() => {
+
+  test(' it contains welcome message', async () => {
     const browser = await puppeteer.launch({})
     const page = await browser.newPage()
     await page.goto('http://localhost:3003')
