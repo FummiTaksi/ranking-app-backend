@@ -3,6 +3,7 @@ const User = require('../models/user')
 const seeder = require('../db/seeds')
 const config = require('../utils/config')
 const mongoose = require('mongoose')
+const { login }  = require('./helper')
 
 beforeAll(async () => {
   console.log('UPLOAD BEFORE ALL')
@@ -23,7 +24,7 @@ describe('When user goes to upload page ', async() => {
   })
  
   test(' and is signed in, loading files is possible', async () => {
-    await login(process.env.ADMIN_USERNAME, process.env.ADMIN_PASSWORD)
+    await login(page, process.env.ADMIN_USERNAME, process.env.ADMIN_PASSWORD)
     await page.goto('http://localhost:3003/#/upload')
     await page.waitForSelector('h3')
     const textContent = await page.$eval('body', el => el.textContent)
@@ -37,12 +38,6 @@ describe('When user goes to upload page ', async() => {
     const includes = textContent.includes('excel')
     expect(includes).toBeFalsy()
   },10000)
-
-  const login = async(username, password) => {
-    await page.type('input', username)
-    await page.type('input[type=password]', password)
-    await page.click('button')
-  }
 
   afterEach(async () => {
     await browser.close()
