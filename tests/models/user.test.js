@@ -4,8 +4,8 @@ const User = require('../../models/user')
 const bcrypt = require('bcrypt')
 
 beforeAll(async () => {
-  console.log('LOGIN TEST BEFOREALL ',config.MONGOLAB_URL)
-  mongoose.connect(config.MONGOLAB_URL)
+  console.log('User BEFOREALL ',config.MONGOLAB_URL)
+  await mongoose.connect(config.MONGOLAB_URL)
   mongoose.Promise = global.Promise
 })
 
@@ -35,4 +35,5 @@ describe('User', async() => {
 afterAll( async () => {
   await User.remove({})
   await mongoose.connection.close()
+  console.log('User after all')
 })
