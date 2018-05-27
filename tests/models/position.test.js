@@ -18,7 +18,8 @@ describe('Position', () => {
     const positionModel = {
       position: 1,
       rating: 1500,
-      playerName: 'Testi Testinen'
+      playerName: 'Testi Testinen',
+      clubName: 'TestClub'
     }
     const position = new Position(positionModel)
     await position.save()

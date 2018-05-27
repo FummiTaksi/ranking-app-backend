@@ -15,6 +15,9 @@ const positionSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  clubName: {
+    type: String
+  },
   ranking: { type: mongoose.Schema.Types.ObjectId, ref: 'Ranking' },
 })
 
