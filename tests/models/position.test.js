@@ -8,7 +8,7 @@ beforeAll(async () => {
   mongoose.Promise = global.Promise
 })
 
-describe('User', async() => {
+describe('Position', () => {
 
   beforeEach( async () => {
     await Position.remove({})
