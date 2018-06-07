@@ -1,9 +1,9 @@
 const mongoose = require('mongoose')
 const config = require('../../utils/config')
 const Position = require('../../models/position')
+const Ranking = require('../../models/ranking')
 
 beforeAll(async () => {
-  console.log('Position BEFOREALL ',config.MONGOLAB_URL)
   await mongoose.connect(config.MONGOLAB_URL)
   mongoose.Promise = global.Promise
 })
@@ -11,6 +11,7 @@ beforeAll(async () => {
 describe('Position', () => {
 
   beforeEach( async () => {
+    await Ranking.remove({})
     await Position.remove({})
   })
 
@@ -26,10 +27,30 @@ describe('Position', () => {
     const allPositions = await Position.find({})
     expect(allPositions.length).toBe(1)
   })
+
+  test(' belongs to Ranking', async () => {
+    const rankingModel = {
+      competitionName: 'Test Competition',
+      date: Date.now()
+    }
+    const ranking = new Ranking(rankingModel)
+    const rankingSaveResponse = await ranking.save()
+    const positionModel = {
+      position: 1,
+      rating: 1500,
+      playerName: 'Testi Testinen',
+      clubName: 'TestClub',
+      ranking: rankingSaveResponse._id
+    }
+    const position = new Position(positionModel)
+    const positionSaveResponse = await position.save()
+    expect(positionSaveResponse.ranking).toBe(rankingSaveResponse._id)
+  })
 })
 
 afterAll( async () => {
   await Position.remove({})
+  await Ranking.remove({})
   await mongoose.connection.close()
   console.log('Position afterAll')
 })

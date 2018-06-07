@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt')
 beforeAll(async () => {
   console.log('User BEFOREALL ',config.MONGOLAB_URL)
   await mongoose.connect(config.MONGOLAB_URL)
-  mongoose.Promise = global.Promise
+  console.log('CONNECTED in User')
 })
 
 describe('User', () => {
