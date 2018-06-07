@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer')
-const User = require('../models/user')
-const seeder = require('../db/seeds')
-const config = require('../utils/config')
+const User = require('../../models/user')
+const seeder = require('../../db/seeds')
+const config = require('../../utils/config')
 const mongoose = require('mongoose')
 const { login }  = require('./helper')
 
