@@ -6,8 +6,9 @@
   "scripts": {
     "start": "node index.js",
     "watch": "nodemon index.js",
-    "test": "npm-run-all test:unit test:e2e",
-    "test:unit": "NODE_ENV=test jest --verbose --runInBand --forceExit tests/",
+    "test": "npm-run-all test:unit test:api test:e2e",
+    "test:api": "NODE_ENV=test jest --verbose --runInBand --forceExit tests/api",
+    "test:unit": "NODE_ENV=test jest --verbose --runInBand --forceExit tests/models",
     "test:e2e": "NODE_ENV=test TEST_PORT=3003 npm-run-all --parallel --race start test:e2e:runner",
     "test:e2e:runner": "jest --runInBand --forceExit  e2e/ ",
     "lint": "eslint ."
