@@ -17,6 +17,12 @@ rankingRouter.post('/new', async (request, response) => {
     if (!userWhoAddedRanking.admin) {
       return response.status(401).json(getAccessDeniedMessage())
     }
+    if (!body.rankingName) {
+      return response.status(400).json({ error: 'Ranking must have a name' })
+    }
+    if (!body.rankingDate) {
+      return response.status(400).json({ error: 'Ranking must have a date!' })
+    }
     const json = fileService.convertBase64ToExcel(body.rankingFileBase64)
     rankingService.saveRankingToDatabase(json)
     return response.status(200).json({ message: 'All is good' })
