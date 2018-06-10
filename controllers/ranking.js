@@ -8,7 +8,6 @@ rankingRouter.post('/new', async (request, response) => {
   try {
     const token = request.token
     const body = request.body
-    console.log('BODY',body.rankingName)
     const decodedToken = jwt.verify(token, process.env.SECRET)
     if (!token || !decodedToken.id) {
       return response.status(401).json(getAccessDeniedMessage())
@@ -24,8 +23,8 @@ rankingRouter.post('/new', async (request, response) => {
       return response.status(400).json({ error: 'Ranking must have a date!' })
     }
     const json = fileService.convertBase64ToExcel(body.rankingFileBase64)
-    await rankingService.saveRankingToDatabase(json, body)
-    return response.status(200).json({ message: 'All is good' })
+    const ranking = await rankingService.saveRankingToDatabase(json, body)
+    return response.status(200).json({ message: 'Ranking was created successfully' , ranking: ranking })
   }
   catch(error) {
     console.log('ERROR', error)
