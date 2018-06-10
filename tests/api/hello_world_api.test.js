@@ -26,7 +26,8 @@ describe('When app is running', () => {
 })
 
 
-afterAll(() => {
+afterAll(async() => {
+  await User.remove({})
   server.close()
   console.log('HELLO WORLD END')
 })

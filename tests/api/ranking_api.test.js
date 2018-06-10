@@ -1,6 +1,15 @@
 const supertest = require('supertest')
 const { app, server } = require('../../index')
 const api = supertest(app)
+const User = require('../../models/user')
+const seeder = require('../../db/seeds')
+
+
+beforeAll(async() => {
+  await User.remove({})
+  await seeder.seedAdminToDataBase()
+  console.log('SEEDED IN HELLO WORLD')
+})
 
 const getCorrectToken = async() => {
   const correctCredentials = {
@@ -11,10 +20,10 @@ const getCorrectToken = async() => {
   return response.body.token
 }
 
+
 describe('/api/ranking', () => {
   describe('/new', () => {
     describe(' returns 400 when ', () => {
-
 
       test(' token is not correct', async() => {
         const wrongCredentials = {
@@ -61,7 +70,8 @@ describe('/api/ranking', () => {
 })
 
 
-afterAll(() => {
+afterAll(async() => {
+  await User.remove({})
   server.close()
   console.log('RANKING END')
 })

@@ -46,7 +46,8 @@ describe('/api/login', () => {
 })
 
 
-afterAll(() => {
+afterAll(async() => {
+  await User.remove({})
   server.close()
   console.log('LOGIN END')
 })
