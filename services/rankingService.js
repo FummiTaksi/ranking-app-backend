@@ -23,7 +23,6 @@ const saveRankingToDatabase = (rankingJson) => {
       }
       const object = convertColumnToRankingObject(element)
       console.log(object)
-      return true
     }
     return true
   })
