@@ -53,6 +53,8 @@ const saveRankingToDatabase = async(rankingJson, rankingBody) => {
     }
     return true
   })
+  const savedRanking = await Ranking.findById(createdRanking._id)
+  return savedRanking
 }
 
 module.exports = { saveRankingToDatabase , createRanking, addPositionToRanking }
