@@ -4,6 +4,7 @@ const Position = require('../../../models/position')
 const Ranking = require('../../../models/ranking')
 const rankingService = require('../../../services/rankingService')
 const positionService = require('../../../services/positionService')
+const testHelpers = require('../../helpers/testHelpers')
 
 beforeAll(async () => {
   console.log('rankingService before all')
@@ -19,18 +20,12 @@ describe('rankingService ', () => {
         rankingName: 'Test Rank'
       }
       const rankingSaveResponse = await rankingService.createRanking(rankingBody)
-      const positionBody = {
-        playerName: 'Testi Testaaja',
-        clubName: 'TOP CLUB',
-        rating: 1421,
-        position: 120,
-        ranking: rankingSaveResponse._id
-      }
+      const positionBody = testHelpers.getPositionBody(rankingSaveResponse._id)
       await positionService.createPosition(positionBody)
       const allPositions = await Position.find({})
       expect(allPositions.length).toBe(1)
       const savedPosition = allPositions[0]
-      expect(savedPosition.playerName).toEqual('Testi Testaaja')
+      expect(savedPosition.playerName).toEqual(positionBody.playerName)
       expect(savedPosition.ranking).toEqual(rankingSaveResponse._id)
     })
   })
