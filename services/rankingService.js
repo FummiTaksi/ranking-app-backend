@@ -24,6 +24,17 @@ const createRanking = async(rankingBody) => {
   return response
 }
 
+const addPositionToRanking = async(rankingId, position) => {
+  const rankingToBeUpdated = await Ranking.findById(rankingId)
+  const rankingModel = {
+    competitionName: rankingToBeUpdated.competitionName,
+    date: rankingToBeUpdated.date,
+    positions: rankingToBeUpdated.positions.concat(position)
+  }
+  const response = await Ranking.findByIdAndUpdate(rankingId, rankingModel)
+  return response
+}
+
 const saveRankingToDatabase = async(rankingJson, rankingBody) => {
   const nameString= 'Pelaajalla pitää olla vähintään yksi kisatulos (Kevät-18 tai Syksy-17) jotta näkyisi tällä listalla'
   const noMorePlayers = 'Seuraavilla pelaajilla on rating mutta ei yhtään kisatulosta (Kevät-18 tai Syksy-17) eli eivät mukana ylläolevalla listalla'
@@ -37,10 +48,11 @@ const saveRankingToDatabase = async(rankingJson, rankingBody) => {
       const positionBody = convertColumnToRankingObject(element)
       positionBody.ranking = createdRanking._id
       const savedPosition = await positionService.createPosition(positionBody)
-      console.log('savedPosition')
+      const updatedRanking = await addPositionToRanking(createdRanking._id, savedPosition)
+      console.log('updatedRanking', updatedRanking)
     }
     return true
   })
 }
 
-module.exports = { saveRankingToDatabase , createRanking }
+module.exports = { saveRankingToDatabase , createRanking, addPositionToRanking }
