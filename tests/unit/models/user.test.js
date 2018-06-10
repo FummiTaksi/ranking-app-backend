@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
-const config = require('../../utils/config')
-const User = require('../../models/user')
+const config = require('../../../utils/config')
+const User = require('../../../models/user')
 const bcrypt = require('bcrypt')
 
 beforeAll(async () => {

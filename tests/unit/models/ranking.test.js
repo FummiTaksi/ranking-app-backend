@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
-const config = require('../../utils/config')
-const Ranking = require('../../models/ranking')
-const Position = require('../../models/position')
+const config = require('../../../utils/config')
+const Ranking = require('../../../models/ranking')
+const Position = require('../../../models/position')
 
 beforeAll(async () => {
   console.log('ranking before all')

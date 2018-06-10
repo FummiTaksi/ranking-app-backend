@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
-const config = require('../../utils/config')
-const Position = require('../../models/position')
-const Ranking = require('../../models/ranking')
+const config = require('../../../utils/config')
+const Position = require('../../../models/position')
+const Ranking = require('../../../models/ranking')
 
 beforeAll(async () => {
   await mongoose.connect(config.MONGOLAB_URL)
