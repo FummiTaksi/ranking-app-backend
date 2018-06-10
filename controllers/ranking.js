@@ -24,7 +24,7 @@ rankingRouter.post('/new', async (request, response) => {
       return response.status(400).json({ error: 'Ranking must have a date!' })
     }
     const json = fileService.convertBase64ToExcel(body.rankingFileBase64)
-    rankingService.saveRankingToDatabase(json)
+    await rankingService.saveRankingToDatabase(json, body)
     return response.status(200).json({ message: 'All is good' })
   }
   catch(error) {
