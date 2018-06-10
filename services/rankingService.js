@@ -1,3 +1,4 @@
+const Ranking = require('../models/ranking')
 
 const convertColumnToRankingObject = (column) => {
   const nameString= 'Pelaajalla pitää olla vähintään yksi kisatulos (Kevät-18 tai Syksy-17) jotta näkyisi tällä listalla'
@@ -12,9 +13,20 @@ const convertColumnToRankingObject = (column) => {
   }
 }
 
-const saveRankingToDatabase = (rankingJson) => {
+const createRanking = async(rankingBody) => {
+  const rankingModel = {
+    competitionName: rankingBody.rankingName,
+    date: rankingBody.rankingDate
+  }
+  const ranking = new Ranking(rankingModel)
+  const response = await ranking.save()
+  return response
+}
+
+const saveRankingToDatabase = async(rankingJson, rankingBody) => {
   const nameString= 'Pelaajalla pitää olla vähintään yksi kisatulos (Kevät-18 tai Syksy-17) jotta näkyisi tällä listalla'
   const noMorePlayers = 'Seuraavilla pelaajilla on rating mutta ei yhtään kisatulosta (Kevät-18 tai Syksy-17) eli eivät mukana ylläolevalla listalla'
+  const createdRanking = await createRanking(rankingBody)
   rankingJson.every(function(element, index)  {
     if (index > 2) {
       if (element[nameString] === noMorePlayers) {
@@ -26,11 +38,6 @@ const saveRankingToDatabase = (rankingJson) => {
     }
     return true
   })
-  /*
-  for (let i = 2; i < 103; i++) {
-    const object = convertColumnToRankingObject(rankingJson[i])
-    console.log('OBJECT', object)
-  }*/
 }
 
-module.exports = { saveRankingToDatabase }
+module.exports = { saveRankingToDatabase , createRanking }
