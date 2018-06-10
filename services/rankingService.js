@@ -1,4 +1,5 @@
 const Ranking = require('../models/ranking')
+const positionService = require('./positionService')
 
 const convertColumnToRankingObject = (column) => {
   const nameString= 'Pelaajalla pitää olla vähintään yksi kisatulos (Kevät-18 tai Syksy-17) jotta näkyisi tällä listalla'
@@ -6,9 +7,9 @@ const convertColumnToRankingObject = (column) => {
   const clubString = '__EMPTY_3'
   const ratingString = '__EMPTY_4'
   return {
-    name: column[nameString],
+    playerName: column[nameString],
     position: column[positionString],
-    club: column[clubString],
+    clubName: column[clubString],
     rating: column[ratingString]
   }
 }
@@ -27,14 +28,16 @@ const saveRankingToDatabase = async(rankingJson, rankingBody) => {
   const nameString= 'Pelaajalla pitää olla vähintään yksi kisatulos (Kevät-18 tai Syksy-17) jotta näkyisi tällä listalla'
   const noMorePlayers = 'Seuraavilla pelaajilla on rating mutta ei yhtään kisatulosta (Kevät-18 tai Syksy-17) eli eivät mukana ylläolevalla listalla'
   const createdRanking = await createRanking(rankingBody)
-  rankingJson.every(function(element, index)  {
+  rankingJson.every(async function(element, index)  {
     if (index > 2) {
       if (element[nameString] === noMorePlayers) {
         console.log('RANKING ENDED')
         return false
       }
-      const object = convertColumnToRankingObject(element)
-      console.log(object)
+      const positionBody = convertColumnToRankingObject(element)
+      positionBody.ranking = createdRanking._id
+      const savedPosition = await positionService.createPosition(positionBody)
+      console.log('savedPosition')
     }
     return true
   })
