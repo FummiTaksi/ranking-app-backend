@@ -18,7 +18,7 @@ rankingRouter.post('/new', async (request, response) => {
       return response.status(401).json(getAccessDeniedMessage())
     }
     if (!body.rankingName) {
-      return response.status(400).json({ error: 'Ranking must have a name' })
+      return response.status(400).json({ error: 'Ranking must have a name!' })
     }
     if (!body.rankingDate) {
       return response.status(400).json({ error: 'Ranking must have a date!' })
