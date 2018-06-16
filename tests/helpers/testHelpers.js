@@ -1,3 +1,5 @@
+const fs = require('fs')
+
 const getPositionBody = (rankingId) => {
   const positionBody = {
     playerName: 'Testi Testaaja',
@@ -17,4 +19,9 @@ const getRankingBody = () => {
   return rankingBody
 }
 
-module.exports = { getPositionBody, getRankingBody }
+const getRatingBase64 = () => {
+  const result = fs.readFileSync('./tests/helpers/TestRatingFile.txt', 'utf8')
+  return result
+}
+
+module.exports = { getPositionBody, getRankingBody, getRatingBase64 }
