@@ -5,7 +5,6 @@ describe.only('FileService ', () => {
   test(' converts base64 to json without ', () => {
     const base64 = testHelpers.getRatingBase64()
     const fileJson = fileService.convertBase64ToExcel(base64)
-    console.log('fileJson', fileJson)
-    expect(true).toBeTruthy()
+    expect(fileJson.length).toEqual(10)
   })
 })
