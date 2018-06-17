@@ -4,12 +4,20 @@ const Ranking = require('../../../models/ranking')
 const Position = require('../../../models/position')
 const rankingService = require('../../../services/rankingService')
 const positionService = require('../../../services/positionService')
+const fileService = require('../../../services/fileService')
 const testHelpers = require('../../helpers/testHelpers')
 
 beforeAll(async () => {
   console.log('rankingService before all')
   await mongoose.connect(config.MONGOLAB_URL)
 })
+
+const saveRankingToDataBase = async () => {
+  const body = testHelpers.getRankingBody()
+  const base64 = testHelpers.getRatingBase64()
+  const fileJson = fileService.convertBase64ToExcel(base64)
+  await rankingService.saveRankingToDatabase(fileJson, body)
+}
 
 describe('rankingService ', () => {
 
@@ -38,6 +46,18 @@ describe('rankingService ', () => {
       expect(updatedRanking.positions.length).toBe(1)
       expect(updatedRanking.positions[0]).toEqual(positionSaveResponse._id)
     })
+  })
+
+  describe(' saveRankingToDataBase ', () => {
+    test(' adds correct amount of positions for ranking to DB', async() => {
+      await saveRankingToDataBase()
+      const allPositions = await Position.find({})
+      expect(allPositions.length).toBe(7)
+      const allRankings = await Ranking.find({})
+      const savedRanking = allRankings[0]
+      expect(savedRanking.positions.length).toEqual(7)
+    })
+
   })
 })
 
