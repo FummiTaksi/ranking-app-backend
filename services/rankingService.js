@@ -35,7 +35,9 @@ const addPositionToRanking = async(rankingId, position) => {
   return response
 }
 
-const returnPositionList = async(nameString, noMorePlayers, rankingJson, rankingId) => {
+const returnPositionList = async(rankingJson, rankingId) => {
+  const nameString= 'Pelaajalla pitää olla vähintään yksi kisatulos (Kevät-18 tai Syksy-17) jotta näkyisi tällä listalla'
+  const noMorePlayers = 'Seuraavilla pelaajilla on rating mutta ei yhtään kisatulosta (Kevät-18 tai Syksy-17) eli eivät mukana ylläolevalla listalla'
   let allPlayersSaved = false
   return rankingJson.reduce(async(positionListPromise, element, index) => {
     const positionList = await positionListPromise
@@ -53,10 +55,8 @@ const returnPositionList = async(nameString, noMorePlayers, rankingJson, ranking
   },Promise.resolve([]))
 }
 const saveRankingToDatabase = async(rankingJson, rankingBody) => {
-  const nameString= 'Pelaajalla pitää olla vähintään yksi kisatulos (Kevät-18 tai Syksy-17) jotta näkyisi tällä listalla'
-  const noMorePlayers = 'Seuraavilla pelaajilla on rating mutta ei yhtään kisatulosta (Kevät-18 tai Syksy-17) eli eivät mukana ylläolevalla listalla'
   const createdRanking = await createRanking(rankingBody)
-  const positions = await returnPositionList(nameString, noMorePlayers, rankingJson, createdRanking._id)
+  const positions = await returnPositionList(rankingJson, createdRanking._id)
   createdRanking.positions = positions
   const updatedRanking = await Ranking.findByIdAndUpdate(createdRanking._id, createdRanking)
   return updatedRanking
