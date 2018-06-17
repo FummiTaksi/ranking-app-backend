@@ -35,25 +35,31 @@ const addPositionToRanking = async(rankingId, position) => {
   return response
 }
 
+const returnPositionList = async(nameString, noMorePlayers, rankingJson, rankingId) => {
+  let allPlayersSaved = false
+  return rankingJson.reduce(async(positionListPromise, element, index) => {
+    const positionList = await positionListPromise
+    if (index > 1 && !allPlayersSaved) {
+      if (element[nameString] === noMorePlayers) {
+        allPlayersSaved = true
+        return positionList
+      }
+      const positionBody = convertColumnToRankingObject(element)
+      positionBody.ranking = rankingId
+      const savedPosition = await positionService.createPosition(positionBody)
+      positionList.push(savedPosition._id)
+    }
+    return positionList
+  },Promise.resolve([]))
+}
 const saveRankingToDatabase = async(rankingJson, rankingBody) => {
   const nameString= 'Pelaajalla pitää olla vähintään yksi kisatulos (Kevät-18 tai Syksy-17) jotta näkyisi tällä listalla'
   const noMorePlayers = 'Seuraavilla pelaajilla on rating mutta ei yhtään kisatulosta (Kevät-18 tai Syksy-17) eli eivät mukana ylläolevalla listalla'
   const createdRanking = await createRanking(rankingBody)
-  rankingJson.every(async function(element, index)  {
-    if (index > 1) {
-      if (element[nameString] === noMorePlayers) {
-        return false
-      }
-      const positionBody = convertColumnToRankingObject(element)
-      positionBody.ranking = createdRanking._id
-      const savedPosition = await positionService.createPosition(positionBody)
-      const updatedRanking = await addPositionToRanking(createdRanking._id, savedPosition)
-      console.log('updatedRanking', updatedRanking)
-    }
-    return true
-  })
-  const savedRanking = await Ranking.findById(createdRanking._id)
-  return savedRanking
+  const positions = await returnPositionList(nameString, noMorePlayers, rankingJson, createdRanking._id)
+  createdRanking.positions = positions
+  const updatedRanking = await Ranking.findByIdAndUpdate(createdRanking._id, createdRanking)
+  return updatedRanking
 }
 
 module.exports = { saveRankingToDatabase , createRanking, addPositionToRanking }
