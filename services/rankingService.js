@@ -40,9 +40,8 @@ const saveRankingToDatabase = async(rankingJson, rankingBody) => {
   const noMorePlayers = 'Seuraavilla pelaajilla on rating mutta ei yhtään kisatulosta (Kevät-18 tai Syksy-17) eli eivät mukana ylläolevalla listalla'
   const createdRanking = await createRanking(rankingBody)
   rankingJson.every(async function(element, index)  {
-    if (index > 2) {
+    if (index > 1) {
       if (element[nameString] === noMorePlayers) {
-        console.log('RANKING ENDED')
         return false
       }
       const positionBody = convertColumnToRankingObject(element)
