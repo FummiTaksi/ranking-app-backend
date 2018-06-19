@@ -62,4 +62,9 @@ const saveRankingToDatabase = async(rankingJson, rankingBody) => {
   return updatedRanking
 }
 
-module.exports = { saveRankingToDatabase , createRanking, addPositionToRanking }
+const getRankings = async() => {
+  const allRankings = await Ranking.find({}).populate('positions', { position: 1, rating: 1, playerName: 1, clubName: 1 })
+  return allRankings
+}
+
+module.exports = { saveRankingToDatabase , createRanking, addPositionToRanking, getRankings }
