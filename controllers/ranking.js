@@ -4,6 +4,18 @@ const User = require('../models/user')
 const fileService = require('../services/fileService')
 const rankingService = require('../services/rankingService')
 
+rankingRouter.get('/', async (request, response) => {
+  try {
+    const rankings = await rankingService.getRankings()
+    console.log('allRankings', rankings)
+    response.status(200).send({ rankings })
+  }
+  catch(error) {
+    console.log('ERROR WHEN GETTING RANKINGS', error)
+    response.status(400).json({ message: 'Error while retrieving rankings' })
+  }
+})
+
 rankingRouter.post('/new', async (request, response) => {
   try {
     const token = request.token
