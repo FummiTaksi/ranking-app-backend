@@ -95,8 +95,6 @@ describe('/api/ranking', () => {
       console.log('beforeAll in ranking api')
     })
     test(' returns status 200 and correct amount of rankings ', async() => {
-      /*await emptyDatabase()
-      await seeder.seedAdminToDataBase()*/
       const token = await getCorrectToken()
       await postNewRanking(correctCredentials(), token)
       const response = await api.get('/api/ranking/').expect(200)
