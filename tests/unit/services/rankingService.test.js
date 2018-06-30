@@ -19,6 +19,26 @@ const saveRankingToDataBase = async () => {
   await rankingService.saveRankingToDatabase(fileJson, body)
 }
 
+const saveRankingWithOnePosition = async () => {
+  const rankingModel = {
+    competitionName: 'Test Competition',
+    date: Date.now()
+  }
+  const ranking = new Ranking(rankingModel)
+  const savedRanking = await ranking.save()
+  const positionModel = {
+    position: 1,
+    rating: 1500,
+    playerName: 'Testi Testinen',
+    clubName: 'TestClub',
+    ranking: savedRanking._id,
+  }
+  const position = new Position(positionModel)
+  const positionSaveResponse = await position.save()
+  rankingModel.positions = [positionSaveResponse._id]
+  await Ranking.findByIdAndUpdate(savedRanking._id, rankingModel)
+}
+
 describe('rankingService ', () => {
 
   describe(' createRanking ', () => {
@@ -35,27 +55,6 @@ describe('rankingService ', () => {
       await rankingService.createRanking(body)
       const allRankings = await Ranking.find({})
       expect(allRankings.length).toBe(1)
-    })
-  })
-
-  describe(' addPositionToRanking ', () => {
-    beforeAll(async () => {
-      await Ranking.remove({})
-      await Position.remove({})
-    })
-    afterAll(async () => {
-      await Ranking.remove({})
-      await Position.remove({})
-    })
-    test(' adds position for ranking ', async() => {
-      const body = testHelpers.getRankingBody()
-      const response = await rankingService.createRanking(body)
-      const positionBody = testHelpers.getPositionBody(response._id)
-      const positionSaveResponse = await positionService.createPosition(positionBody)
-      await rankingService.addPositionToRanking(response._id, positionSaveResponse)
-      const updatedRanking = await Ranking.findById(response._id)
-      expect(updatedRanking.positions.length).toBe(1)
-      expect(updatedRanking.positions[0]).toEqual(positionSaveResponse._id)
     })
   })
 
@@ -84,22 +83,7 @@ describe('rankingService ', () => {
     beforeAll(async () => {
       await Ranking.remove({})
       await Position.remove({})
-      const rankingModel = {
-        competitionName: 'Test Competition',
-        date: Date.now()
-      }
-      const ranking = new Ranking(rankingModel)
-      const savedRanking = await ranking.save()
-      const positionModel = {
-        position: 1,
-        rating: 1500,
-        playerName: 'Testi Testinen',
-        clubName: 'TestClub',
-        ranking: savedRanking._id,
-      }
-      const position = new Position(positionModel)
-      const positionSaveResponse = await position.save()
-      await rankingService.addPositionToRanking(savedRanking._id, positionSaveResponse)
+      await saveRankingWithOnePosition();
       console.log('BEfORE ALL DESCRIBESSÄ')
     })
 
@@ -130,22 +114,7 @@ describe('rankingService ', () => {
     beforeAll(async () => {
       await Ranking.remove({})
       await Position.remove({})
-      const rankingModel = {
-        competitionName: 'Test Competition',
-        date: Date.now()
-      }
-      const ranking = new Ranking(rankingModel)
-      const savedRanking = await ranking.save()
-      const positionModel = {
-        position: 1,
-        rating: 1500,
-        playerName: 'Testi Testinen',
-        clubName: 'TestClub',
-        ranking: savedRanking._id,
-      }
-      const position = new Position(positionModel)
-      const positionSaveResponse = await position.save()
-      await rankingService.addPositionToRanking(savedRanking._id, positionSaveResponse)
+      await saveRankingWithOnePosition();
       console.log('BEfORE ALL DESCRIBESSÄ')
     })
 
