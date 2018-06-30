@@ -92,7 +92,6 @@ describe('/api/ranking', () => {
     beforeAll(async() => {
       await Ranking.remove({})
       await Position.remove({})
-      console.log('beforeAll in ranking api')
     })
     test(' returns status 200 and correct amount of rankings ', async() => {
       const token = await getCorrectToken()
@@ -104,7 +103,30 @@ describe('/api/ranking', () => {
     afterAll(async() => {
       await Ranking.remove({})
       await Position.remove({})
-      console.log('beforeAll in ranking api')
+    })
+  })
+
+  describe(' DELETE /:id ', () => {
+    beforeAll(async() => {
+      await Ranking.remove({})
+      await Position.remove({})
+    })
+    describe('returns 400 when', () => {
+      test(' token is not correct', async() => {
+        const token = await getCorrectToken()
+        const response = await postNewRanking(correctCredentials(), token)
+        const rankingId = response.body.ranking._id;
+        await api.delete(`/api/ranking/${rankingId}`).set('Authorization', 'bearer wrongtoken ').expect(400)
+      },10000)
+    })
+    describe('when given correct credentials', () => {
+      test('status is 200 and body contains deletedRanking', async() => {
+        const token = await getCorrectToken()
+        const response = await postNewRanking(correctCredentials(), token)
+        const rankingId = response.body.ranking._id
+        const deleteResponse = await api.delete(`/api/ranking/${rankingId}`).set('Authorization', 'bearer ' + token).expect(200)
+        expect(deleteResponse.body.deletedRanking).toBeDefined()
+      })
     })
   })
 })
