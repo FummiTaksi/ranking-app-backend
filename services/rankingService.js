@@ -30,17 +30,6 @@ const deleteRanking = async(rankingId) => {
   await ranking.remove()
 }
 
-const addPositionToRanking = async(rankingId, position) => {
-  const rankingToBeUpdated = await Ranking.findById(rankingId)
-  const rankingModel = {
-    competitionName: rankingToBeUpdated.competitionName,
-    date: rankingToBeUpdated.date,
-    positions: rankingToBeUpdated.positions.concat(position)
-  }
-  const response = await Ranking.findByIdAndUpdate(rankingId, rankingModel)
-  return response
-}
-
 const returnPositionList = async(rankingJson, rankingId) => {
   const nameString= 'Pelaajalla pitää olla vähintään yksi kisatulos (Kevät-18 tai Syksy-17) jotta näkyisi tällä listalla'
   const noMorePlayers = 'Seuraavilla pelaajilla on rating mutta ei yhtään kisatulosta (Kevät-18 tai Syksy-17) eli eivät mukana ylläolevalla listalla'
@@ -73,4 +62,4 @@ const getRankings = async() => {
   return allRankings
 }
 
-module.exports = { saveRankingToDatabase , createRanking, deleteRanking, addPositionToRanking, getRankings }
+module.exports = { saveRankingToDatabase , createRanking, deleteRanking, getRankings }
