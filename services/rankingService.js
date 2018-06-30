@@ -1,4 +1,5 @@
 const Ranking = require('../models/ranking')
+const Position = require('../models/position')
 const positionService = require('./positionService')
 
 const convertColumnToRankingObject = (column) => {
@@ -22,6 +23,11 @@ const createRanking = async(rankingBody) => {
   const ranking = new Ranking(rankingModel)
   const response = await ranking.save()
   return response
+}
+
+const deleteRanking = async(rankingId) => {
+  const ranking = await Ranking.findById(rankingId)
+  await ranking.remove()
 }
 
 const addPositionToRanking = async(rankingId, position) => {
@@ -67,4 +73,4 @@ const getRankings = async() => {
   return allRankings
 }
 
-module.exports = { saveRankingToDatabase , createRanking, addPositionToRanking, getRankings }
+module.exports = { saveRankingToDatabase , createRanking, deleteRanking, addPositionToRanking, getRankings }
