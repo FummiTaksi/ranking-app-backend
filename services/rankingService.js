@@ -27,7 +27,8 @@ const createRanking = async(rankingBody) => {
 
 const deleteRanking = async(rankingId) => {
   const ranking = await Ranking.findById(rankingId)
-  await ranking.remove()
+  const removed =  await ranking.remove()
+  return removed
 }
 
 const returnPositionList = async(rankingJson, rankingId) => {
