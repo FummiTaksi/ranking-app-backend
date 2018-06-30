@@ -44,6 +44,28 @@ rankingRouter.post('/new', async (request, response) => {
   }
 })
 
+rankingRouter.delete('/:id', async (request, response) => {
+  try {
+    const token = request.token
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+    console.log('decodedToken', decodedToken)
+    if (!token || !decodedToken.id) {
+      return response.status(401).json(getAccessDeniedMessage())
+    }
+    const userWhoAddedRanking = await User.findById(decodedToken.id)
+    if (!userWhoAddedRanking.admin) {
+      return response.status(401).json(getAccessDeniedMessage())
+    }
+    const deletedRanking = await rankingService.deleteRanking(request.params.id)
+    return response.status(200).json({ message: 'Ranking was deleted successfully', deletedRanking })
+  }
+  catch(error) {
+    console.log('error while deleting ranking',error)
+    response.status(400).json(getAccessDeniedMessage())
+  }
+
+})
+
 const getAccessDeniedMessage = () => {
   return ({ error: 'You must be signed in admin to create new ranking!' })
 }
