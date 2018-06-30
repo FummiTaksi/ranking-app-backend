@@ -88,17 +88,18 @@ describe('rankingService ', () => {
         competitionName: 'Test Competition',
         date: Date.now()
       }
+      const ranking = new Ranking(rankingModel)
+      const savedRanking = await ranking.save()
       const positionModel = {
         position: 1,
         rating: 1500,
         playerName: 'Testi Testinen',
-        clubName: 'TestClub'
+        clubName: 'TestClub',
+        ranking: savedRanking._id,
       }
       const position = new Position(positionModel)
       const positionSaveResponse = await position.save()
-      rankingModel.positions = [positionSaveResponse]
-      const ranking = new Ranking(rankingModel)
-      await ranking.save()
+      await rankingService.addPositionToRanking(savedRanking._id, positionSaveResponse)
       console.log('BEfORE ALL DESCRIBESSÄ')
     })
 
@@ -121,6 +122,46 @@ describe('rankingService ', () => {
       console.log('position', position)
       expect(position.position).toEqual(1)
       expect(position.rating).toEqual(1500)
+    })
+  })
+
+  describe(' deleteRanking ', () => {
+
+    beforeAll(async () => {
+      await Ranking.remove({})
+      await Position.remove({})
+      const rankingModel = {
+        competitionName: 'Test Competition',
+        date: Date.now()
+      }
+      const ranking = new Ranking(rankingModel)
+      const savedRanking = await ranking.save()
+      const positionModel = {
+        position: 1,
+        rating: 1500,
+        playerName: 'Testi Testinen',
+        clubName: 'TestClub',
+        ranking: savedRanking._id,
+      }
+      const position = new Position(positionModel)
+      const positionSaveResponse = await position.save()
+      await rankingService.addPositionToRanking(savedRanking._id, positionSaveResponse)
+      console.log('BEfORE ALL DESCRIBESSÄ')
+    })
+
+    afterAll(async() => {
+      await Ranking.remove({})
+      await Position.remove({})
+    })
+
+    test(' deletes ranking and its positions from database', async() => {
+      const rankingsBeforeDelete = await rankingService.getRankings()
+      const firstRanking = rankingsBeforeDelete[0]
+      await rankingService.deleteRanking(firstRanking.id)
+      const rankingsAfterDelete = await rankingService.getRankings()
+      expect(rankingsAfterDelete.length).toEqual(0)
+      const positionsAfterDelete  = await Position.find({})
+      expect(positionsAfterDelete.length).toEqual(0)
     })
   })
 })
