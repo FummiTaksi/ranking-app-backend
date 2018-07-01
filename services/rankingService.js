@@ -32,7 +32,7 @@ const deleteRanking = async(rankingId) => {
 }
 
 const getRanking = async(rankingId) => {
-  const ranking = await Ranking.findById(rankingId)
+  const ranking = await Ranking.findById(rankingId).populate('positions', { position: 1, rating: 1, playerName: 1, clubName: 1 })
   return ranking
 }
 
