@@ -7,12 +7,21 @@ const rankingService = require('../services/rankingService')
 rankingRouter.get('/', async (request, response) => {
   try {
     const rankings = await rankingService.getRankings()
-    console.log('allRankings', rankings)
     response.status(200).send({ rankings })
   }
   catch(error) {
     console.log('ERROR WHEN GETTING RANKINGS', error)
     response.status(400).json({ message: 'Error while retrieving rankings' })
+  }
+})
+
+rankingRouter.get('/:id', async (request, response) => {
+  try {
+    const ranking = await rankingService.getRanking(request.params.id)
+    response.status(200).send({ ranking })
+  }
+  catch(error) {
+    response.status(400).json({ message: 'Error while getting ranking' })
   }
 })
 
