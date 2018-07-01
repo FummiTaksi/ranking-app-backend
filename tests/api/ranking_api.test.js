@@ -129,6 +129,29 @@ describe('/api/ranking', () => {
       })
     })
   })
+
+  describe(' GET /:id ', () => {
+    beforeAll(async() => {
+      await Ranking.remove({})
+      await Position.remove({})
+    })
+    describe('returns 400 when', () => {
+      test(' ranking is not found', async() => {
+        const token = await getCorrectToken()
+        await postNewRanking(correctCredentials(), token)
+        await api.get(`/api/ranking/wrongId`).expect(400)
+      },10000)
+    })
+    describe('when given correct credentials', () => {
+      test('status is 200 and body contains correct ranking', async() => {
+        const token = await getCorrectToken()
+        const response = await postNewRanking(correctCredentials(), token)
+        const rankingId = response.body.ranking._id
+        const getResponse = await api.get(`/api/ranking/${rankingId}`).expect(200)
+        expect(getResponse.body.ranking).toBeDefined()
+      })
+    })
+  })
 })
 
 
