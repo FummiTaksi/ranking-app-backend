@@ -26,9 +26,14 @@ const createRanking = async(rankingBody) => {
 }
 
 const deleteRanking = async(rankingId) => {
-  const ranking = await Ranking.findById(rankingId)
+  const ranking = await getRanking(rankingId)
   const removed =  await ranking.remove()
   return removed
+}
+
+const getRanking = async(rankingId) => {
+  const ranking = await Ranking.findById(rankingId)
+  return ranking
 }
 
 const returnPositionList = async(rankingJson, rankingId) => {
@@ -63,4 +68,4 @@ const getRankings = async() => {
   return allRankings
 }
 
-module.exports = { saveRankingToDatabase , createRanking, deleteRanking, getRankings }
+module.exports = { saveRankingToDatabase , createRanking, deleteRanking, getRankings, getRanking }
