@@ -1,9 +1,11 @@
 const puppeteer = require('puppeteer')
 const User = require('../../models/user')
+const Ranking = require('../../models/ranking')
+const Position = require('../../models/position')
 const seeder = require('../../db/seeds')
 const config = require('../../utils/config')
 const mongoose = require('mongoose')
-const { login }  = require('./helper')
+const { login, uploadRanking }  = require('./helper')
 
 beforeAll(async () => {
   console.log('UPLOAD BEFORE ALL')
@@ -18,29 +20,48 @@ describe('When user goes to upload page ', () => {
   let page
   
   beforeEach(async () => {
+    await Ranking.remove({})
+    await Position.remove({})
     browser = await puppeteer.launch({ args: ['--no-sandbox'] })
     page = await browser.newPage()
     await page.goto('http://localhost:3003/#/signin')
   })
- 
-  test(' and is signed in, ranking form can be filled', async () => {
-    await login(page, process.env.ADMIN_USERNAME, process.env.ADMIN_PASSWORD)
-    await page.goto('http://localhost:3003/#/upload',)
-    await page.waitForSelector('#fileDrop')
-    const fileEle = await page.$('input[type="file"]')
-    await page.waitForSelector('#fileDrop')
-    await fileEle.uploadFile('./tests/helpers/TestRatingFile.xls')
-    await page.waitForSelector('form')
-    await page.type('input[name=rankingName]', 'Puppeteer Competition')
-    await page.waitForSelector('button[type=submit]')
-    await page.waitFor(5000)
-    await page.click('button[type=submit]')
-    await page.waitForSelector('.success')
-    const textContent = await page.$eval('body', el => el.textContent)
-    const includes = textContent.includes('Ranking Puppeteer Competition was created succsefully!')
-    expect(includes).toBeTruthy()
-  },10000)
 
+  describe.only(' and is signed in', () => {
+
+    beforeEach(async () => {
+      await Ranking.remove({})
+      await Position.remove({})
+      browser = await puppeteer.launch({ args: ['--no-sandbox'] })
+      page = await browser.newPage()
+      await page.goto('http://localhost:3003/#/signin')
+    })
+
+    test(' ranking form can be filled', async () => {
+      await login(page, process.env.ADMIN_USERNAME, process.env.ADMIN_PASSWORD)
+      await uploadRanking(page)
+      await page.goto('http://localhost:3003/#/rankings')
+      await page.waitForSelector('h3')
+      const textContent = await page.$eval('body', el => el.textContent)
+      const includes = textContent.includes('Here are all 1 rankings that are uploaded to this site')
+      expect(includes).toBeTruthy()
+    },10000)
+
+    test.only(' ranking can be deleted', async () => {
+      await login(page, process.env.ADMIN_USERNAME, process.env.ADMIN_PASSWORD)
+      await uploadRanking(page)
+      await page.goto('http://localhost:3003/#/rankings')
+      await page.waitForSelector('button')
+      await page.click('button')
+      await page.waitForSelector('p')
+      const textContent = await page.$eval('body', el => el.textContent)
+      console.log('textcontent', textContent)
+      const includes = textContent.includes('Here are all 1 rankings that are uploaded to this site')
+      expect(includes).toBeTruthy()
+    },10000)
+
+  })
+ 
   test(' and is not signed in, loading files is not possible', async () => {
     await page.goto('http://localhost:3003/#/upload')
     const textContent = await page.$eval('body', el => el.textContent)
