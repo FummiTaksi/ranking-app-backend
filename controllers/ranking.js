@@ -57,7 +57,6 @@ rankingRouter.delete('/:id', async (request, response) => {
   try {
     const token = request.token
     const decodedToken = jwt.verify(token, process.env.SECRET)
-    console.log('decodedToken', decodedToken)
     if (!token || !decodedToken.id) {
       return response.status(401).json(getAccessDeniedMessage())
     }
