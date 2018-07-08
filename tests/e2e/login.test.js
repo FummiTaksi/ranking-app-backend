@@ -40,7 +40,7 @@ describe('When user goest to login page ', () => {
     await login(page, process.env.ADMIN_USERNAME, process.env.ADMIN_PASSWORD)
     await page.waitForSelector('.success')
     const textContent = await page.$eval('body', el => el.textContent)
-    const includes = textContent.includes('Welcome back Admin!')
+    const includes = textContent.includes('You are signed in as Admin')
     expect(includes).toBe(true)
   },10000)
 
