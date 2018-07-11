@@ -38,6 +38,8 @@ describe('When user goes to upload page ', () => {
     })
 
     test(' ranking form can be filled', async () => {
+      const allRankings = await Ranking.find({})
+      console.log('allRankings', allRankings);
       await login(page, process.env.ADMIN_USERNAME, process.env.ADMIN_PASSWORD)
       await uploadRanking(page)
       await page.goto('http://localhost:3003/#/rankings')
