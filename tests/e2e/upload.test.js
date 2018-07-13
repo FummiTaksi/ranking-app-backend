@@ -38,14 +38,11 @@ describe('When user goes to upload page ', () => {
     })
 
     test(' ranking form can be filled', async () => {
-      const allRankings = await Ranking.find({})
-      console.log('allRankings', allRankings);
       await login(page, process.env.ADMIN_USERNAME, process.env.ADMIN_PASSWORD)
       await uploadRanking(page)
       await page.goto('http://localhost:3003/#/rankings')
       await page.waitForSelector('h3')
       const textContent = await page.$eval('body', el => el.textContent)
-      console.log('textContent', textContent)
       const includes = textContent.includes('Here are all 1 rankings that are uploaded to this site')
       expect(includes).toBeTruthy()
     },10000)
