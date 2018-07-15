@@ -33,7 +33,7 @@ describe('When user goes to upload page ', () => {
       console.log('and is signed in beforeEach starts!')
       await Ranking.remove({})
       await Position.remove({})
-      browser = await puppeteer.launch({ args: ['--no-sandbox'], headless: false, slowMo: 28 })
+      browser = await puppeteer.launch({ args: ['--no-sandbox'] })
       page = await browser.newPage()
       await page.goto('http://localhost:3003/#/signin')
       console.log('and is signed in beforeEach ends')
@@ -49,12 +49,10 @@ describe('When user goes to upload page ', () => {
       const textContent = await page.$eval('body', el => el.textContent)
       console.log('textContent',textContent)
       const includes = textContent.includes('Here are all 1 rankings that are uploaded to this site')
-      await browser.close()
       expect(includes).toBeTruthy()
     },10000)
 
     test(' ranking can be deleted', async () => {
-      console.log('ranking can be deleted starts!!')
       await login(page, process.env.ADMIN_USERNAME, process.env.ADMIN_PASSWORD)
       await uploadRanking(page)
       await page.goto('http://localhost:3003/#/rankings')
@@ -64,8 +62,6 @@ describe('When user goes to upload page ', () => {
       await page.waitForSelector('p')
       const textContent = await page.$eval('body', el => el.textContent)
       const includes = textContent.includes('No rankings saved to database yet')
-      await browser.close()
-      console.log('ranking can be deleted ends!!')
       expect(includes).toBeTruthy()
     },10000)
 
