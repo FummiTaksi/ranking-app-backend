@@ -6,11 +6,10 @@
   "scripts": {
     "start": "node index.js",
     "watch": "nodemon index.js",
-    "test": "npm-run-all test:unit test:api test:e2e",
-    "test:api": "NODE_ENV=test jest --verbose --runInBand --forceExit --coverage tests/api",
+    "test": "npm-run-all test:unit test:e2e",
     "test:unit": "NODE_ENV=test jest --verbose --runInBand --forceExit --coverage tests/unit",
     "test:e2e": "NODE_ENV=test TEST_PORT=3003 npm-run-all --parallel --race start test:e2e:runner",
-    "test:e2e:runner": "jest --runInBand --forceExit --coverage  /tests/e2e/ ",
+    "test:e2e:runner": "jest --runInBand --forceExit  /tests/e2e/ ",
     "lint": "eslint ."
   },
   "author": "Aleksi Mustonen",
@@ -32,7 +31,6 @@
   },
   "devDependencies": {
     "babel-eslint": "^8.2.2",
-    "coveralls": "^3.0.2",
     "eslint": "^4.19.1",
     "jest": "^22.4.2",
     "nodemon": "^1.17.1",
