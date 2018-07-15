@@ -7,7 +7,6 @@ const User = require('../../../models/user')
 beforeAll(async () => {
   await User.remove({})
   await seeder.seedAdminToDataBase()
-  console.log('SEEDEED IN LOGIN_API')
 })
 
 describe('/api/login', () => {
@@ -39,13 +38,9 @@ describe('/api/login', () => {
       expect(response.body.admin).toBe(true)
     },10000)
   })
-
-
 })
-
 
 afterAll(async() => {
   await User.remove({})
   server.close()
-  console.log('LOGIN END')
 })

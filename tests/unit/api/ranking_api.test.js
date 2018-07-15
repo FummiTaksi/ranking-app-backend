@@ -11,7 +11,6 @@ const testHelpers = require('../../helpers/testHelpers')
 beforeAll(async() => {
   await emptyDatabase()
   await seeder.seedAdminToDataBase()
-  console.log('beforeAll in ranking api')
 })
 
 const emptyDatabase = async() => {
@@ -158,5 +157,4 @@ describe('/api/ranking', () => {
 afterAll(async() => {
   await emptyDatabase()
   server.close()
-  console.log('RANKING END')
 })
