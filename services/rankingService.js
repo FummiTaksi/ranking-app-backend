@@ -1,5 +1,4 @@
 const Ranking = require('../models/ranking')
-const Position = require('../models/position')
 const positionService = require('./positionService')
 
 const convertColumnToRankingObject = (column) => {

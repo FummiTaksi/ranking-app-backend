@@ -42,9 +42,9 @@ describe('Ranking ', () => {
     const rankingSaveResponse = await ranking.save()
     expect(rankingSaveResponse.positions.length).toBe(1)
     const rankingWithPopulatedPositions = await Ranking.findById(rankingSaveResponse._id)
-                                                        .populate('positions', {position: 1, rating: 1, playerName: 1, clubName: 1})
-    expect(rankingWithPopulatedPositions.positions[0].position).toEqual(1)    
-    expect(rankingWithPopulatedPositions.positions[0].clubName).toEqual('TestClub')                           
+      .populate('positions', { position: 1, rating: 1, playerName: 1, clubName: 1 })
+    expect(rankingWithPopulatedPositions.positions[0].position).toEqual(1)
+    expect(rankingWithPopulatedPositions.positions[0].clubName).toEqual('TestClub')
   })
 })
 

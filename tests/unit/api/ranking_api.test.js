@@ -115,7 +115,7 @@ describe('/api/ranking', () => {
       test(' token is not correct', async() => {
         const token = await getCorrectToken()
         const response = await postNewRanking(correctCredentials(), token)
-        const rankingId = response.body.ranking._id;
+        const rankingId = response.body.ranking._id
         await api.delete(`/api/ranking/${rankingId}`).set('Authorization', 'bearer wrongtoken ').expect(400)
       },10000)
     })
@@ -139,7 +139,7 @@ describe('/api/ranking', () => {
       test(' ranking is not found', async() => {
         const token = await getCorrectToken()
         await postNewRanking(correctCredentials(), token)
-        await api.get(`/api/ranking/wrongId`).expect(400)
+        await api.get('/api/ranking/wrongId').expect(400)
       },10000)
     })
     describe('when given correct credentials', () => {

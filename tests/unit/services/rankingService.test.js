@@ -3,7 +3,6 @@ const config = require('../../../utils/config')
 const Ranking = require('../../../models/ranking')
 const Position = require('../../../models/position')
 const rankingService = require('../../../services/rankingService')
-const positionService = require('../../../services/positionService')
 const fileService = require('../../../services/fileService')
 const testHelpers = require('../../helpers/testHelpers')
 
@@ -83,7 +82,7 @@ describe('rankingService ', () => {
     beforeAll(async () => {
       await Ranking.remove({})
       await Position.remove({})
-      await saveRankingWithOnePosition();
+      await saveRankingWithOnePosition()
       console.log('BEfORE ALL DESCRIBESSÄ')
     })
 
@@ -114,7 +113,7 @@ describe('rankingService ', () => {
     beforeAll(async () => {
       await Ranking.remove({})
       await Position.remove({})
-      await saveRankingWithOnePosition();
+      await saveRankingWithOnePosition()
       console.log('BEfORE ALL DESCRIBESSÄ')
     })
 

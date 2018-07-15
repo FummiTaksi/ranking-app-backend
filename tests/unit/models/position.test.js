@@ -46,7 +46,7 @@ describe('Position', () => {
     const positionSaveResponse = await position.save()
     expect(positionSaveResponse.ranking).toBe(rankingSaveResponse._id)
     const positionWithPopulatedRanking = await Position.findById(positionSaveResponse._id)
-                                                       .populate('ranking', { competitionName: 1 })
+      .populate('ranking', { competitionName: 1 })
     expect(positionWithPopulatedRanking.ranking.competitionName).toEqual('Test Competition')
   })
 })

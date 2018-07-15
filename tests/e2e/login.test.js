@@ -16,9 +16,8 @@ beforeAll(async () => {
 describe('When user goest to login page ', () => {
   let browser
   let page
-  
   beforeEach(async () => {
-    browser = await puppeteer.launch({args: ['--no-sandbox']})
+    browser = await puppeteer.launch({ args: ['--no-sandbox'] })
     page = await browser.newPage()
     await page.goto('http://localhost:3003/#/signin')
   })
