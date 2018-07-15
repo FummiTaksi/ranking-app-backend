@@ -4,9 +4,7 @@ const User = require('../../../models/user')
 const bcrypt = require('bcrypt')
 
 beforeAll(async () => {
-  console.log('User BEFOREALL ',config.MONGOLAB_URL)
   await mongoose.connect(config.MONGOLAB_URL)
-  console.log('CONNECTED in User')
 })
 
 describe('User', () => {
@@ -35,5 +33,4 @@ describe('User', () => {
 afterAll( async () => {
   await User.remove({})
   await mongoose.connection.close()
-  console.log('User after all')
 })

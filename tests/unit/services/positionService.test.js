@@ -4,10 +4,9 @@ const Position = require('../../../models/position')
 const Ranking = require('../../../models/ranking')
 const rankingService = require('../../../services/rankingService')
 const positionService = require('../../../services/positionService')
-const testHelpers = require('../../helpers/testHelpers')
+const { getRankingBody, getPositionModelBody } = require('../../helpers/testHelpers')
 
 beforeAll(async () => {
-  console.log('rankingService before all')
   await mongoose.connect(config.MONGOLAB_URL)
 })
 
@@ -15,12 +14,9 @@ describe('rankingService ', () => {
 
   describe(' createPosition ', () => {
     test(' creates position which has ranking attached to it', async() => {
-      const rankingBody = {
-        rankingDate: Date.now(),
-        rankingName: 'Test Rank'
-      }
+      const rankingBody = getRankingBody()
       const rankingSaveResponse = await rankingService.createRanking(rankingBody)
-      const positionBody = testHelpers.getPositionBody(rankingSaveResponse._id)
+      const positionBody = getPositionModelBody(rankingSaveResponse._id)
       await positionService.createPosition(positionBody)
       const allPositions = await Position.find({})
       expect(allPositions.length).toBe(1)
@@ -35,5 +31,4 @@ afterAll( async () => {
   await Position.remove({})
   await Ranking.remove({})
   await mongoose.connection.close()
-  console.log('rankingService afterAll')
 })

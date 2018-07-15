@@ -2,10 +2,10 @@ const supertest = require('supertest')
 const { app, server } = require('../../../index')
 const api = supertest(app)
 const User = require('../../../models/user')
-const Ranking = require('../../../models/ranking')
-const Position = require('../../../models/position')
 const seeder = require('../../../db/seeds')
-const testHelpers = require('../../helpers/testHelpers')
+const { getRatingBase64 ,
+  removePositionsAndRankings } = require('../../helpers/testHelpers')
+
 
 
 beforeAll(async() => {
@@ -15,8 +15,7 @@ beforeAll(async() => {
 
 const emptyDatabase = async() => {
   await User.remove({})
-  await Ranking.remove({})
-  await Position.remove({})
+  await removePositionsAndRankings()
 }
 
 const getCorrectToken = async() => {
@@ -29,7 +28,7 @@ const getCorrectToken = async() => {
 }
 
 const correctCredentials = () => {
-  const base64 = testHelpers.getRatingBase64()
+  const base64 = getRatingBase64()
   return {
     rankingFileBase64: base64,
     rankingName: 'Test Cup',
@@ -61,7 +60,6 @@ describe('/api/ranking', () => {
         const rankingResponse = await postNewRanking(missingRankingName, token)
         expect(rankingResponse.status).toEqual(400)
         expect(rankingResponse.body.error).toEqual('Ranking must have a name!')
-        console.log('STATUS', rankingResponse.status)
       },10000)
       test(' body is missing rankingDate', async() => {
         const missingRankingDate = correctCredentials()
@@ -89,8 +87,7 @@ describe('/api/ranking', () => {
   describe(' GET /', () => {
 
     beforeAll(async() => {
-      await Ranking.remove({})
-      await Position.remove({})
+      await removePositionsAndRankings()
     })
     test(' returns status 200 and correct amount of rankings ', async() => {
       const token = await getCorrectToken()
@@ -100,15 +97,13 @@ describe('/api/ranking', () => {
     })
 
     afterAll(async() => {
-      await Ranking.remove({})
-      await Position.remove({})
+      await removePositionsAndRankings()
     })
   })
 
   describe(' DELETE /:id ', () => {
     beforeAll(async() => {
-      await Ranking.remove({})
-      await Position.remove({})
+      await removePositionsAndRankings()
     })
     describe('returns 400 when', () => {
       test(' token is not correct', async() => {
@@ -131,8 +126,7 @@ describe('/api/ranking', () => {
 
   describe(' GET /:id ', () => {
     beforeAll(async() => {
-      await Ranking.remove({})
-      await Position.remove({})
+      await removePositionsAndRankings()
     })
     describe('returns 400 when', () => {
       test(' ranking is not found', async() => {

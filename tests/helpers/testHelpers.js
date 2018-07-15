@@ -1,6 +1,8 @@
 const fs = require('fs')
+const Position = require('../../models/position')
+const Ranking = require('../../models/ranking')
 
-const getPositionBody = (rankingId) => {
+const getPositionModelBody = (rankingId) => {
   const positionBody = {
     playerName: 'Testi Testaaja',
     clubName: 'TOP CLUB',
@@ -9,6 +11,13 @@ const getPositionBody = (rankingId) => {
     ranking: rankingId
   }
   return positionBody
+}
+
+const getRankingModelBody = () => {
+  return {
+    date: Date.now(),
+    competitionName: 'Test Competition'
+  }
 }
 
 const getRankingBody = () => {
@@ -24,4 +33,10 @@ const getRatingBase64 = () => {
   return result
 }
 
-module.exports = { getPositionBody, getRankingBody, getRatingBase64 }
+const removePositionsAndRankings = async() => {
+  await Position.remove({})
+  await Ranking.remove({})
+}
+
+module.exports = { getPositionModelBody, getRankingBody, getRankingModelBody,
+  getRatingBase64, removePositionsAndRankings }
