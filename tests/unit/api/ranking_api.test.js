@@ -6,8 +6,6 @@ const seeder = require('../../../db/seeds')
 const { getRatingBase64 ,
   removePositionsAndRankings } = require('../../helpers/testHelpers')
 
-
-
 beforeAll(async() => {
   await emptyDatabase()
   await seeder.seedAdminToDataBase()
