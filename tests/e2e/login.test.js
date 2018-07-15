@@ -26,7 +26,7 @@ describe('When user goest to login page ', () => {
     const textContent = await page.$eval('body', el => el.textContent)
     const includes = textContent.includes('Signing in is only available for admin!')
     expect(includes).toBe(true)
-  })
+  },10000)
 
   test(' and fills wrong credentials, login fails', async () => {
     await login(page, process.env.ADMIN_USERNAME, 'wrongPassword')
