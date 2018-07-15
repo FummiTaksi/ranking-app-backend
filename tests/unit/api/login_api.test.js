@@ -1,10 +1,8 @@
 const supertest = require('supertest')
-const { app, server } = require('../../index')
-const seeder = require('../../db/seeds')
+const { app, server } = require('../../../index')
+const seeder = require('../../../db/seeds')
 const api = supertest(app)
-const User = require('../../models/user')
-
-
+const User = require('../../../models/user')
 
 beforeAll(async () => {
   await User.remove({})

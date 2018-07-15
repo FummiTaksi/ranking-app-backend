@@ -1,11 +1,11 @@
 const supertest = require('supertest')
-const { app, server } = require('../../index')
+const { app, server } = require('../../../index')
 const api = supertest(app)
-const User = require('../../models/user')
-const Ranking = require('../../models/ranking')
-const Position = require('../../models/position')
-const seeder = require('../../db/seeds')
-const testHelpers = require('../helpers/testHelpers')
+const User = require('../../../models/user')
+const Ranking = require('../../../models/ranking')
+const Position = require('../../../models/position')
+const seeder = require('../../../db/seeds')
+const testHelpers = require('../../helpers/testHelpers')
 
 
 beforeAll(async() => {
