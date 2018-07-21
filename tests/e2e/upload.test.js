@@ -22,9 +22,6 @@ describe('When user goes to upload page ', () => {
   beforeEach(async () => {
     await Ranking.remove({})
     await Position.remove({})
-    browser = await puppeteer.launch({ args: ['--no-sandbox'] })
-    page = await browser.newPage()
-    await page.goto('http://localhost:3003/#/signin')
   })
 
   describe(' and is signed in', () => {
