@@ -11,8 +11,8 @@ beforeAll(async () => {
   await seeder.seedAdminToDataBase();
 });
 
-describe.only('/api/login', () => {
-  test.only('with wrong credentials, access is denied', async () => {
+describe('/api/login', () => {
+  test('with wrong credentials, access is denied', async () => {
     const wrongCredentials = {
       username: process.env.ADMIN_USERNAME,
       password: 'ASF',
