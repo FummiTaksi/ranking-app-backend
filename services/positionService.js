@@ -6,4 +6,11 @@ const createPosition = async (positionBody) => {
   return response;
 };
 
-module.exports = { createPosition };
+const getPositions = async () => {
+  const positions = await Position.find({}).populate('ranking', {
+    competitionName: 1,
+  });
+  return positions;
+};
+
+module.exports = { createPosition, getPositions };
