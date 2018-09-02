@@ -24,21 +24,6 @@ describe('rankingService ', () => {
       expect(savedPosition.ranking).toEqual(rankingSaveResponse._id);
     });
   });
-
-  describe(' getPositions', () => {
-    beforeAll(async () => {
-      await Position.remove({});
-      await Ranking.remove({});
-      const rankingBody = getRankingBody();
-      const rankingSaveResponse = await rankingService.createRanking(rankingBody);
-      const positionBody = getPositionModelBody(rankingSaveResponse._id);
-      await positionService.createPosition(positionBody);
-    });
-    test(' returns correct amount of positions', async () => {
-      const positions = await positionService.getPositions();
-      expect(positions.length).toEqual(1);
-    });
-  });
 });
 
 afterAll(async () => {
