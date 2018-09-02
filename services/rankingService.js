@@ -1,4 +1,5 @@
 const Ranking = require('../models/ranking');
+const playerService = require('./playerService');
 const positionService = require('./positionService');
 
 const convertColumnToRankingObject = (column) => {
@@ -51,6 +52,7 @@ const returnPositionList = async (rankingJson, rankingId) => {
       const positionBody = convertColumnToRankingObject(element);
       positionBody.ranking = rankingId;
       const savedPosition = await positionService.createPosition(positionBody);
+      await playerService.createPlayer(savedPosition);
       positionList.push(savedPosition._id);
     }
     return positionList;
@@ -66,7 +68,10 @@ const saveRankingToDatabase = async (rankingJson, rankingBody) => {
 
 const getRankings = async () => {
   const allRankings = await Ranking.find({}).populate('positions', {
-    position: 1, rating: 1, playerName: 1, clubName: 1,
+    position: 1,
+    rating: 1,
+    playerName: 1,
+    clubName: 1,
   });
   return allRankings;
 };

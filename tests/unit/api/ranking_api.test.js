@@ -2,14 +2,14 @@ const supertest = require('supertest');
 const { app, server } = require('../../../index');
 const User = require('../../../models/user');
 const seeder = require('../../../db/seeds');
-const { getRatingBase64, removePositionsAndRankings } = require('../../helpers/testHelpers');
+const { getRatingBase64, removePositionsAndRankingsAndPlayers } = require('../../helpers/testHelpers');
 
 const api = supertest(app);
 
 
 const emptyDatabase = async () => {
   await User.remove({});
-  await removePositionsAndRankings();
+  await removePositionsAndRankingsAndPlayers();
 };
 
 
@@ -82,7 +82,7 @@ describe('/api/ranking', () => {
 
   describe(' GET /', () => {
     beforeAll(async () => {
-      await removePositionsAndRankings();
+      await removePositionsAndRankingsAndPlayers();
     });
     test(' returns status 200 and correct amount of rankings ', async () => {
       const token = await getCorrectToken();
@@ -91,14 +91,21 @@ describe('/api/ranking', () => {
       expect(response.body.rankings.length).toEqual(1);
     });
 
+    test(' returns correct type of positions', async () => {
+      const token = await getCorrectToken();
+      await postNewRanking(correctCredentials(), token);
+      const response = await api.get('/api/ranking/').expect(200);
+      expect(response.body.rankings[0].positions[0].playerName).toEqual('Ykkös Ykkönen');
+    });
+
     afterAll(async () => {
-      await removePositionsAndRankings();
+      await removePositionsAndRankingsAndPlayers();
     });
   });
 
   describe(' DELETE /:id ', () => {
     beforeAll(async () => {
-      await removePositionsAndRankings();
+      await removePositionsAndRankingsAndPlayers();
     });
     describe('returns 400 when', () => {
       test(' token is not correct', async () => {
@@ -121,7 +128,7 @@ describe('/api/ranking', () => {
 
   describe(' GET /:id ', () => {
     beforeAll(async () => {
-      await removePositionsAndRankings();
+      await removePositionsAndRankingsAndPlayers();
     });
     describe('returns 400 when', () => {
       test(' ranking is not found', async () => {

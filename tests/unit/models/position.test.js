@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 const config = require('../../../utils/config');
 const Position = require('../../../models/position');
 const Ranking = require('../../../models/ranking');
-const { getPositionModelBody, getRankingModelBody } = require('../../helpers/testHelpers');
+const Player = require('../../../models/player');
+const { getPositionModelBody, getRankingModelBody, getPlayerModelBody } = require('../../helpers/testHelpers');
 
 beforeAll(async () => {
   await mongoose.connect(config.MONGOLAB_URL);
@@ -35,6 +36,20 @@ describe('Position', () => {
       .populate('ranking', { competitionName: 1 });
     const { competitionName } = positionWithPopulatedRanking.ranking;
     expect(competitionName).toEqual(rankingModel.competitionName);
+  });
+
+  test(' has one Player', async () => {
+    const playerModel = getPlayerModelBody();
+    const player = new Player(playerModel);
+    const playerSaveResponse = await player.save();
+    const positionModel = getPositionModelBody(undefined, playerSaveResponse._id);
+    const position = new Position(positionModel);
+    const positionSaveResponse = await position.save();
+    expect(positionSaveResponse.player).toBe(playerSaveResponse._id);
+    const positionWithPopulatedPlayer = await Position.findById(positionSaveResponse._id)
+      .populate('player', { name: 1 });
+    const { name } = positionWithPopulatedPlayer.player;
+    expect(name).toEqual(playerModel.name);
   });
 });
 

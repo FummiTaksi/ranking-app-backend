@@ -2,12 +2,13 @@ const mongoose = require('mongoose');
 const config = require('../../../utils/config');
 const Ranking = require('../../../models/ranking');
 const Position = require('../../../models/position');
+const Player = require('../../../models/player');
 const rankingService = require('../../../services/rankingService');
 const fileService = require('../../../services/fileService');
 const {
   getRankingBody, getRatingBase64,
-  getRankingModelBody, getPositionModelBody,
-  removePositionsAndRankings,
+  getRankingModelBody, getPositionModelBody, getPlayerModelBody,
+  removePositionsAndRankingsAndPlayers,
 } = require('../../helpers/testHelpers');
 
 beforeAll(async () => {
@@ -25,7 +26,10 @@ const saveRankingWithOnePosition = async () => {
   const rankingModel = getRankingModelBody();
   const ranking = new Ranking(rankingModel);
   const savedRanking = await ranking.save();
-  const positionModel = getPositionModelBody(savedRanking._id);
+  const playerModel = getPlayerModelBody();
+  const player = new Player(playerModel);
+  const savedPlayer = await player.save();
+  const positionModel = getPositionModelBody(savedRanking._id, savedPlayer._id);
   const position = new Position(positionModel);
   const positionSaveResponse = await position.save();
   rankingModel.positions = [positionSaveResponse._id];
@@ -35,10 +39,10 @@ const saveRankingWithOnePosition = async () => {
 describe('rankingService ', () => {
   describe(' createRanking ', () => {
     beforeAll(async () => {
-      await removePositionsAndRankings();
+      await removePositionsAndRankingsAndPlayers();
     });
     afterAll(async () => {
-      await removePositionsAndRankings();
+      await removePositionsAndRankingsAndPlayers();
     });
     test(' creates ranking with correct body', async () => {
       const body = getRankingBody();
@@ -50,29 +54,47 @@ describe('rankingService ', () => {
 
   describe(' saveRankingToDataBase ', () => {
     beforeAll(async () => {
-      await removePositionsAndRankings();
+      await removePositionsAndRankingsAndPlayers();
+      await saveRankingToDataBase();
     });
     afterAll(async () => {
-      await removePositionsAndRankings();
+      await removePositionsAndRankingsAndPlayers();
     });
     test(' adds correct amount of positions for ranking to DB', async () => {
-      await saveRankingToDataBase();
       const allPositions = await Position.find({});
       expect(allPositions.length).toBe(7);
       const allRankings = await Ranking.find({});
       const savedRanking = allRankings[0];
       expect(savedRanking.positions.length).toEqual(7);
     });
+    test('adds correct amount of players to DB', async () => {
+      const allPlayers = await Player.find({});
+      expect(allPlayers.length).toEqual(7);
+    });
+
+    describe('if same ranking is saved twice', () => {
+      let allPlayers;
+      beforeAll(async () => {
+        await saveRankingToDataBase();
+        allPlayers = await Player.find({}).populate('positions');
+      });
+      test(' players dont duplicate', () => {
+        expect(allPlayers.length).toEqual(7);
+      });
+      test(' players have two positions', () => {
+        expect(allPlayers[0].positions.length).toEqual(2);
+      });
+    });
   });
 
   describe(' getRankings ', () => {
     beforeAll(async () => {
-      await removePositionsAndRankings();
+      await removePositionsAndRankingsAndPlayers();
       await saveRankingWithOnePosition();
     });
 
     afterAll(async () => {
-      await removePositionsAndRankings();
+      await removePositionsAndRankingsAndPlayers();
     });
 
     test(' returns correct amount of rankings', async () => {
@@ -87,6 +109,7 @@ describe('rankingService ', () => {
       const allRankings = await rankingService.getRankings();
       const position = allRankings[0].positions[0];
       const positionModel = getPositionModelBody();
+      expect(position.playerName).toEqual('Testi Testaaja');
       expect(position.position).toEqual(positionModel.position);
       expect(position.rating).toEqual(positionModel.rating);
     });
@@ -94,12 +117,12 @@ describe('rankingService ', () => {
 
   describe(' deleteRanking ', () => {
     beforeAll(async () => {
-      await removePositionsAndRankings();
+      await removePositionsAndRankingsAndPlayers();
       await saveRankingWithOnePosition();
     });
 
     afterAll(async () => {
-      await removePositionsAndRankings();
+      await removePositionsAndRankingsAndPlayers();
     });
 
     test(' deletes ranking and its positions from database', async () => {
@@ -115,6 +138,6 @@ describe('rankingService ', () => {
 });
 
 afterAll(async () => {
-  await removePositionsAndRankings();
+  await removePositionsAndRankingsAndPlayers();
   await mongoose.connection.close();
 });

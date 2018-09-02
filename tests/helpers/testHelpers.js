@@ -1,14 +1,16 @@
 const fs = require('fs');
 const Position = require('../../models/position');
 const Ranking = require('../../models/ranking');
+const Player = require('../../models/player');
 
-const getPositionModelBody = (rankingId) => {
+const getPositionModelBody = (rankingId, playerId) => {
   const positionBody = {
-    playerName: 'Testi Testaaja',
     clubName: 'TOP CLUB',
+    playerName: 'Testi Testaaja',
     rating: 1421,
     position: 120,
     ranking: rankingId,
+    player: playerId,
   };
   return positionBody;
 };
@@ -16,6 +18,10 @@ const getPositionModelBody = (rankingId) => {
 const getRankingModelBody = () => ({
   date: Date.now(),
   competitionName: 'Test Competition',
+});
+
+const getPlayerModelBody = () => ({
+  name: 'Testi Testinen',
 });
 
 const getRankingBody = () => {
@@ -31,9 +37,10 @@ const getRatingBase64 = () => {
   return result;
 };
 
-const removePositionsAndRankings = async () => {
+const removePositionsAndRankingsAndPlayers = async () => {
   await Position.remove({});
   await Ranking.remove({});
+  await Player.remove({});
 };
 
 module.exports = {
@@ -41,5 +48,6 @@ module.exports = {
   getRankingBody,
   getRankingModelBody,
   getRatingBase64,
-  removePositionsAndRankings,
+  removePositionsAndRankingsAndPlayers,
+  getPlayerModelBody,
 };
