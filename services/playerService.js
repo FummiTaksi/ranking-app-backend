@@ -14,4 +14,12 @@ const createPlayer = async (positionSaveResponse) => {
   return response;
 };
 
-module.exports = { createPlayer };
+
+const getPlayers = async () => {
+  const players = await Player.find({}).populate('positions', {
+    position: 1, rating: 1, clubName: 1, time: 1,
+  });
+  return players;
+};
+
+module.exports = { createPlayer, getPlayers };

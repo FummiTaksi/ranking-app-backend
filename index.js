@@ -9,6 +9,7 @@ const seeder = require('./db/seeds');
 
 const loginRouter = require('./controllers/login');
 const rankingRouter = require('./controllers/ranking');
+const playerRouter = require('./controllers/player');
 
 const middlewares = require('./middlewares/middlewares');
 
@@ -22,6 +23,7 @@ app.use(middlewares.tokenExtractor);
 app.use(morgan('tiny'));
 app.use('/api/login', loginRouter);
 app.use('/api/ranking', rankingRouter);
+app.use('/api/players', playerRouter);
 app.get('/', (req, res) => {
   res.send('<h1>Hello World!</h1>');
 });

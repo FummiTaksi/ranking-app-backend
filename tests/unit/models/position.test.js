@@ -14,6 +14,7 @@ describe('Position', () => {
   beforeEach(async () => {
     await Ranking.remove({});
     await Position.remove({});
+    await Player.remove({});
   });
 
   test(' can be created with valid credentials', async () => {
@@ -56,5 +57,6 @@ describe('Position', () => {
 afterAll(async () => {
   await Position.remove({});
   await Ranking.remove({});
+  await Player.remove({});
   await mongoose.connection.close();
 });
