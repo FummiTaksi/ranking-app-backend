@@ -9,6 +9,7 @@ const getPositionModelBody = (rankingId, playerId) => {
     playerName: 'Testi Testaaja',
     rating: 1421,
     position: 120,
+    date: Date.now(),
     ranking: rankingId,
     player: playerId,
   };

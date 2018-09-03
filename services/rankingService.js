@@ -38,7 +38,7 @@ const deleteRanking = async (rankingId) => {
   return removed;
 };
 
-const returnPositionList = async (rankingJson, rankingId) => {
+const returnPositionList = async (rankingJson, rankingId, date) => {
   const nameString = 'Pelaajalla pitää olla vähintään yksi kisatulos (Kevät-18 tai Syksy-17) jotta näkyisi tällä listalla';
   const noMorePlayers = 'Seuraavilla pelaajilla on rating mutta ei yhtään kisatulosta (Kevät-18 tai Syksy-17) eli eivät mukana ylläolevalla listalla';
   let allPlayersSaved = false;
@@ -51,6 +51,7 @@ const returnPositionList = async (rankingJson, rankingId) => {
       }
       const positionBody = convertColumnToRankingObject(element);
       positionBody.ranking = rankingId;
+      positionBody.date = date;
       const savedPosition = await positionService.createPosition(positionBody);
       await playerService.createPlayer(savedPosition);
       positionList.push(savedPosition._id);
@@ -60,7 +61,7 @@ const returnPositionList = async (rankingJson, rankingId) => {
 };
 const saveRankingToDatabase = async (rankingJson, rankingBody) => {
   const createdRanking = await createRanking(rankingBody);
-  const positions = await returnPositionList(rankingJson, createdRanking._id);
+  const positions = await returnPositionList(rankingJson, createdRanking._id, createdRanking.date);
   createdRanking.positions = positions;
   const updatedRanking = await Ranking.findByIdAndUpdate(createdRanking._id, createdRanking);
   return updatedRanking;
