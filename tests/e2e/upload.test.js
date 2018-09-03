@@ -5,7 +5,7 @@ const Ranking = require('../../models/ranking');
 const Position = require('../../models/position');
 const seeder = require('../../db/seeds');
 const config = require('../../utils/config');
-const { login, uploadRanking } = require('./helper');
+const { login, uploadRanking, timeout } = require('./helper');
 
 beforeAll(async () => {
   mongoose.connect(config.MONGOLAB_URL);
@@ -42,20 +42,21 @@ describe('When user goes to upload page ', () => {
       const textContent = await page.$eval('body', el => el.textContent);
       const includes = textContent.includes('Here are all 1 rankings that are uploaded to this site');
       expect(includes).toBeTruthy();
-    }, 10000);
+    }, timeout);
 
     test(' ranking can be deleted', async () => {
       await login(page, process.env.ADMIN_USERNAME, process.env.ADMIN_PASSWORD);
       await uploadRanking(page);
       await page.goto('http://localhost:3003/#/rankings');
       await page.waitForSelector('.delete');
+      await page.waitFor(1000);
       await page.click('.delete');
       await page.waitFor(5000);
       await page.waitForSelector('p');
       const textContent = await page.$eval('body', el => el.textContent);
       const includes = textContent.includes('No rankings saved to database yet');
       expect(includes).toBeTruthy();
-    }, 10000);
+    }, timeout);
 
 
     afterEach(async () => {
@@ -77,7 +78,7 @@ describe('When user goes to upload page ', () => {
       const textContent = await page.$eval('body', el => el.textContent);
       const includes = textContent.includes('excel');
       expect(includes).toBeFalsy();
-    }, 10000);
+    }, timeout);
 
     test('deleting rankings is not possible', async () => {
       await login(page, process.env.ADMIN_USERNAME, process.env.ADMIN_PASSWORD);
@@ -89,7 +90,7 @@ describe('When user goes to upload page ', () => {
       const textContent = await page.$eval('body', el => el.textContent);
       const includes = textContent.includes('Delete');
       expect(includes).toBeFalsy();
-    }, 10000);
+    }, timeout);
   });
 
 

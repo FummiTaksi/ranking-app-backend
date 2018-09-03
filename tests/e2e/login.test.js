@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const User = require('../../models/user');
 const seeder = require('../../db/seeds');
 const config = require('../../utils/config');
-const { login } = require('./helper');
+const { login, timeout } = require('./helper');
 
 beforeAll(async () => {
   mongoose.connect(config.MONGOLAB_URL);
@@ -24,7 +24,7 @@ describe('When user goest to login page ', () => {
     const textContent = await page.$eval('body', el => el.textContent);
     const includes = textContent.includes('Signing in is only available for admin!');
     expect(includes).toBe(true);
-  }, 10000);
+  }, timeout);
 
   test(' and fills wrong credentials, login fails', async () => {
     await login(page, process.env.ADMIN_USERNAME, 'wrongPassword');
@@ -32,7 +32,7 @@ describe('When user goest to login page ', () => {
     const textContent = await page.$eval('body', el => el.textContent);
     const includes = textContent.includes('Wrong username or password!');
     expect(includes).toBe(true);
-  }, 10000);
+  }, timeout);
 
   test(' and fills correct credentials, login succeeds', async () => {
     await login(page, process.env.ADMIN_USERNAME, process.env.ADMIN_PASSWORD);
@@ -40,7 +40,7 @@ describe('When user goest to login page ', () => {
     const textContent = await page.$eval('body', el => el.textContent);
     const includes = textContent.includes('You are signed in as Admin');
     expect(includes).toBe(true);
-  }, 10000);
+  }, timeout);
 
   afterEach(async () => {
     await browser.close();

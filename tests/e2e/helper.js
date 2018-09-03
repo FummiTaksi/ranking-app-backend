@@ -15,4 +15,6 @@ const uploadRanking = async (page) => {
   await page.waitForSelector('button[type=submit]');
   await page.click('button[type=submit]');
 };
-module.exports = { login, uploadRanking };
+
+const timeout = 200000;
+module.exports = { login, uploadRanking, timeout };

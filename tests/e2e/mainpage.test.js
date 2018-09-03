@@ -1,4 +1,5 @@
 const puppeteer = require('puppeteer');
+const { timeout } = require('./helper');
 
 describe('When user visits main page ', () => {
   test(' it contains welcome message', async () => {
@@ -9,5 +10,5 @@ describe('When user visits main page ', () => {
     const includes = textContent.includes('Welcome to Ranking-app!');
     expect(includes).toBe(true);
     await browser.close();
-  });
+  }, timeout);
 });
