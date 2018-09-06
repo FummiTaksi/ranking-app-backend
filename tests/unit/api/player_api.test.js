@@ -37,12 +37,6 @@ describe('/api/players', () => {
     test('has correct player information', () => {
       expect(player.name).toEqual(playerModel.name);
     });
-    test('player has correct position', () => {
-      const { positions } = player;
-      expect(positions.length).toEqual(1);
-      expect(positions[0].rating).toEqual(positionModel.rating);
-    });
-
     afterAll(async () => {
       await removePositionsAndRankingsAndPlayers();
     });
