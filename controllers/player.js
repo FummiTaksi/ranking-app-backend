@@ -11,4 +11,13 @@ playerRouter.get('/', async (request, response) => {
   }
 });
 
+playerRouter.get('/:id', async (request, response) => {
+  try {
+    const player = await playerService.getPlayer(request.params.id);
+    response.status(200).send({ player });
+  } catch (error) {
+    console.log('ERROR WHEN GETTING PLAYERS', error);
+    response.status(400).json({ message: 'Error when fetching player' });
+  }
+});
 module.exports = playerRouter;

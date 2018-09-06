@@ -22,4 +22,12 @@ const getPlayers = async () => {
   return players;
 };
 
-module.exports = { createPlayer, getPlayers };
+const getPlayer = async (id) => {
+  const player = await Player.findById(id).populate('positions', {
+    position: 1, rating: 1, clubName: 1, time: 1,
+  });
+  return player;
+};
+
+
+module.exports = { createPlayer, getPlayers, getPlayer };

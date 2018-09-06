@@ -42,8 +42,63 @@ describe('/api/players', () => {
       expect(positions.length).toEqual(1);
       expect(positions[0].rating).toEqual(positionModel.rating);
     });
+
+    afterAll(async () => {
+      await removePositionsAndRankingsAndPlayers();
+    });
   });
 
+  describe('/:id GET', () => {
+    let saveResponse;
+    describe(' when id matches player', () => {
+      let response;
+      const playerModel = getPlayerModelBody();
+      let player;
+      let positionModel;
+      beforeAll(async () => {
+        positionModel = getPositionModelBody();
+        const position = new Position(positionModel);
+        const positionSaveResponse = await position.save();
+        playerModel.positions = [positionSaveResponse];
+        const model = new Player(playerModel);
+        saveResponse = await model.save();
+        response = await api.get(`/api/players/${saveResponse._id}`);
+        ({ player } = response.body);
+      });
+      test('status is 200', () => {
+        expect(response.status).toEqual(200);
+      });
+      test('has correct player information', () => {
+        expect(player.name).toEqual(playerModel.name);
+      });
+      test('player has correct position', () => {
+        const { positions } = player;
+        expect(positions.length).toEqual(1);
+        expect(positions[0].rating).toEqual(positionModel.rating);
+      });
+      afterAll(async () => {
+        await removePositionsAndRankingsAndPlayers();
+      });
+    });
+
+    describe('when id dont match any players', () => {
+      let response;
+      let player;
+      beforeAll(async () => {
+        response = await api.get(`/api/players/${saveResponse._id}`);
+        ({ player } = response.body);
+      });
+      test('status is 200', () => {
+        expect(response.status).toEqual(200);
+      });
+      test('player is null', () => {
+        expect(player).toBeNull();
+      });
+    });
+    afterAll(async () => {
+      await removePositionsAndRankingsAndPlayers();
+    });
+  });
   afterAll(async () => {
     await removePositionsAndRankingsAndPlayers();
     server.close();
