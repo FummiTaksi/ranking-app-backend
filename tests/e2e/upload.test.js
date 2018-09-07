@@ -6,6 +6,8 @@ const Position = require('../../models/position');
 const seeder = require('../../db/seeds');
 const config = require('../../utils/config');
 const { login, uploadRanking, timeout } = require('./helper');
+const rankingService = require('../../services/rankingService');
+const { getRankingBody } = require('../helpers/testHelpers');
 
 beforeAll(async () => {
   mongoose.connect(config.MONGOLAB_URL);
@@ -43,14 +45,13 @@ describe('When user goes to upload page ', () => {
     }, timeout);
 
     test(' ranking can be deleted', async () => {
+      const body = getRankingBody();
+      await rankingService.createRanking(body);
       await login(page, process.env.ADMIN_USERNAME, process.env.ADMIN_PASSWORD);
-      await uploadRanking(page);
       await page.goto('http://localhost:3003/#/rankings');
-      await page.waitForSelector('.delete');
-      await page.waitFor(1000);
+      await page.waitForSelector('.delete', { options: { visible: true } });
       await page.click('.delete');
-      await page.waitFor(5000);
-      await page.waitForSelector('p');
+      await page.waitForSelector('#noRankings', { options: { visible: true } });
       const textContent = await page.$eval('body', el => el.textContent);
       const includes = textContent.includes('No rankings saved to database yet');
       expect(includes).toBeTruthy();
@@ -79,8 +80,9 @@ describe('When user goes to upload page ', () => {
     }, timeout);
 
     test('deleting rankings is not possible', async () => {
+      const body = getRankingBody();
+      await rankingService.createRanking(body);
       await login(page, process.env.ADMIN_USERNAME, process.env.ADMIN_PASSWORD);
-      await uploadRanking(page);
       await page.click('button');
       await page.goto('http://localhost:3003/#/rankings');
       await page.waitForSelector('p', { options: { visible: true } });
