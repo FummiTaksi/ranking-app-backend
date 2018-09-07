@@ -2,6 +2,8 @@ const fs = require('fs');
 const Position = require('../../models/position');
 const Ranking = require('../../models/ranking');
 const Player = require('../../models/player');
+const fileService = require('../../services/fileService');
+const rankingService = require('../../services/rankingService');
 
 const getPositionModelBody = (rankingId, playerId) => {
   const positionBody = {
@@ -44,6 +46,13 @@ const removePositionsAndRankingsAndPlayers = async () => {
   await Player.remove({});
 };
 
+const seedRatingExcelToDatabase = async () => {
+  const body = getRankingBody();
+  const base64 = getRatingBase64();
+  const fileJson = fileService.convertBase64ToExcel(base64);
+  await rankingService.saveRankingToDatabase(fileJson, body);
+};
+
 module.exports = {
   getPositionModelBody,
   getRankingBody,
@@ -51,4 +60,5 @@ module.exports = {
   getRatingBase64,
   removePositionsAndRankingsAndPlayers,
   getPlayerModelBody,
+  seedRatingExcelToDatabase,
 };

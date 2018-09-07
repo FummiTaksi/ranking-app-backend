@@ -4,23 +4,16 @@ const Ranking = require('../../../models/ranking');
 const Position = require('../../../models/position');
 const Player = require('../../../models/player');
 const rankingService = require('../../../services/rankingService');
-const fileService = require('../../../services/fileService');
 const {
-  getRankingBody, getRatingBase64,
+  getRankingBody,
   getRankingModelBody, getPositionModelBody, getPlayerModelBody,
   removePositionsAndRankingsAndPlayers,
+  seedRatingExcelToDatabase,
 } = require('../../helpers/testHelpers');
 
 beforeAll(async () => {
   await mongoose.connect(config.MONGOLAB_URL);
 });
-
-const saveRankingToDataBase = async () => {
-  const body = getRankingBody();
-  const base64 = getRatingBase64();
-  const fileJson = fileService.convertBase64ToExcel(base64);
-  await rankingService.saveRankingToDatabase(fileJson, body);
-};
 
 const saveRankingWithOnePosition = async () => {
   const rankingModel = getRankingModelBody();
@@ -55,7 +48,7 @@ describe('rankingService ', () => {
   describe(' saveRankingToDataBase ', () => {
     beforeAll(async () => {
       await removePositionsAndRankingsAndPlayers();
-      await saveRankingToDataBase();
+      await seedRatingExcelToDatabase();
     });
     afterAll(async () => {
       await removePositionsAndRankingsAndPlayers();
@@ -75,7 +68,7 @@ describe('rankingService ', () => {
     describe('if same ranking is saved twice', () => {
       let allPlayers;
       beforeAll(async () => {
-        await saveRankingToDataBase();
+        await seedRatingExcelToDatabase();
         allPlayers = await Player.find({}).populate('positions');
       });
       test(' players dont duplicate', () => {
