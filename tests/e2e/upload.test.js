@@ -35,10 +35,8 @@ describe('When user goes to upload page ', () => {
     test(' ranking can be created', async () => {
       await login(page, process.env.ADMIN_USERNAME, process.env.ADMIN_PASSWORD);
       await uploadRanking(page);
-      await page.waitFor(3000);
       await page.goto('http://localhost:3003/#/rankings');
-      await page.waitForSelector('h3');
-      await page.waitFor(3000);
+      await page.waitForSelector('h3', { options: { visible: true } });
       const textContent = await page.$eval('body', el => el.textContent);
       const includes = textContent.includes('Here are all 1 rankings that are uploaded to this site');
       expect(includes).toBeTruthy();
@@ -85,8 +83,7 @@ describe('When user goes to upload page ', () => {
       await uploadRanking(page);
       await page.click('button');
       await page.goto('http://localhost:3003/#/rankings');
-      await page.waitFor(3000);
-      await page.waitForSelector('p');
+      await page.waitForSelector('p', { options: { visible: true } });
       const textContent = await page.$eval('body', el => el.textContent);
       const includes = textContent.includes('Delete');
       expect(includes).toBeFalsy();
