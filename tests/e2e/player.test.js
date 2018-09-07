@@ -18,7 +18,7 @@ describe('When user visits players page ', () => {
     await seedRatingExcelToDatabase();
   });
   test(' it shows correct amount of players', async () => {
-    browser = await puppeteer.launch({ args: ['--no-sandbox'], headless: false });
+    browser = await puppeteer.launch({ args: ['--no-sandbox'] });
     const page = await browser.newPage();
     await page.goto('http://localhost:3003/#/players');
     await page.waitForSelector('#playerList', { options: { visible: true } });
@@ -31,7 +31,7 @@ describe('When user visits players page ', () => {
     const firstPlayer = players[0];
     const playerId = firstPlayer._id;
     const { name } = firstPlayer;
-    browser = await puppeteer.launch({ args: ['--no-sandbox'], headless: false });
+    browser = await puppeteer.launch({ args: ['--no-sandbox'] });
     const page = await browser.newPage();
     await page.goto(`http://localhost:3003/#/players/${playerId}`);
     await page.waitForSelector('h2', { options: { visible: true } });
