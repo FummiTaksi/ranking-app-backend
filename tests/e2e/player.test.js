@@ -9,6 +9,7 @@ const { removePositionsAndRankingsAndPlayers, seedRatingExcelToDatabase } = requ
 
 describe('When user visits players page ', () => {
   let browser;
+  let page;
   beforeAll(async () => {
     mongoose.connect(config.MONGOLAB_URL);
     mongoose.Promise = global.Promise;
@@ -16,12 +17,12 @@ describe('When user visits players page ', () => {
     await removePositionsAndRankingsAndPlayers();
     await seeder.seedAdminToDataBase();
     await seedRatingExcelToDatabase();
+    browser = await puppeteer.launch({ args: ['--no-sandbox'] });
+    page = await browser.newPage();
   });
   test(' it shows correct amount of players', async () => {
-    browser = await puppeteer.launch({ args: ['--no-sandbox'] });
-    const page = await browser.newPage();
     await page.goto('http://localhost:3003/#/players');
-    await page.waitForSelector('#playerList', { options: { visible: true } });
+    await page.waitForSelector('#playerList');
     const textContent = await page.$eval('body', el => el.textContent);
     const includes = textContent.includes('Showing 7 players that matched your search');
     expect(includes).toBe(true);
@@ -31,18 +32,15 @@ describe('When user visits players page ', () => {
     const firstPlayer = players[0];
     const playerId = firstPlayer._id;
     const { name } = firstPlayer;
-    browser = await puppeteer.launch({ args: ['--no-sandbox'] });
-    const page = await browser.newPage();
     await page.goto(`http://localhost:3003/#/players/${playerId}`);
-    await page.waitForSelector('h2', { options: { visible: true } });
+    await page.waitForSelector('#playerView');
     const textContent = await page.$eval('body', el => el.textContent);
     const includes = textContent.includes(`Statistics of ${name}`);
     expect(includes).toBe(true);
   }, timeout);
-  afterEach(async () => {
-    await browser.close();
-  });
+
   afterAll(async () => {
+    await browser.close();
     await User.remove({});
     await removePositionsAndRankingsAndPlayers();
     await mongoose.connection.close();
