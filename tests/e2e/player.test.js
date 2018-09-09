@@ -21,7 +21,7 @@ describe('When user visits players page ', () => {
     page = await browser.newPage();
   });
   test(' it shows correct amount of players', async () => {
-    await page.goto('http://localhost:3003/#/players');
+    await page.goto('http://localhost:3003/#/');
     await page.waitForSelector('#playerList');
     const textContent = await page.$eval('body', el => el.textContent);
     const includes = textContent.includes('Showing 7 players that matched your search');
