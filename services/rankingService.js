@@ -1,6 +1,7 @@
 const Ranking = require('../models/ranking');
 const playerService = require('./playerService');
 const positionService = require('./positionService');
+const dateService = require('./dateService');
 
 const convertColumnToRankingObject = (column) => {
   const nameString = 'Pelaajalla pitää olla vähintään yksi kisatulos (Kevät-18 tai Syksy-17) jotta näkyisi tällä listalla';
@@ -39,8 +40,9 @@ const deleteRanking = async (rankingId) => {
 };
 
 const returnPositionList = async (rankingJson, rankingId, date) => {
-  const nameString = 'Pelaajalla pitää olla vähintään yksi kisatulos (Kevät-18 tai Syksy-17) jotta näkyisi tällä listalla';
-  const noMorePlayers = 'Seuraavilla pelaajilla on rating mutta ei yhtään kisatulosta (Kevät-18 tai Syksy-17) eli eivät mukana ylläolevalla listalla';
+  const seasonInfo = dateService.getFallAndSpringYears(date);
+  const nameString = `Pelaajalla pitää olla vähintään yksi kisatulos ${seasonInfo} jotta näkyisi tällä listalla`;
+  const noMorePlayers = `Seuraavilla pelaajilla on rating mutta ei yhtään kisatulosta ${seasonInfo} eli eivät mukana ylläolevalla listalla`;
   let allPlayersSaved = false;
   return rankingJson.reduce(async (positionListPromise, element, index) => {
     const positionList = await positionListPromise;
