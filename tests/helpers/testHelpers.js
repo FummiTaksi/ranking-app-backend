@@ -11,7 +11,7 @@ const getPositionModelBody = (rankingId, playerId) => {
     playerName: 'Testi Testaaja',
     rating: 1421,
     position: 120,
-    date: new Date(2018, 6, 15),
+    date: new Date(2018, 5, 15),
     ranking: rankingId,
     player: playerId,
   };
@@ -19,7 +19,7 @@ const getPositionModelBody = (rankingId, playerId) => {
 };
 
 const getRankingModelBody = () => ({
-  date: new Date(2018, 6, 15),
+  date: new Date(2018, 5, 15),
   competitionName: 'Test Competition',
 });
 
@@ -29,7 +29,7 @@ const getPlayerModelBody = () => ({
 
 const getRankingBody = () => {
   const rankingBody = {
-    rankingDate: new Date(2018, 6, 15),
+    rankingDate: new Date(2018, 5, 15),
     rankingName: 'Test Rank',
   };
   return rankingBody;

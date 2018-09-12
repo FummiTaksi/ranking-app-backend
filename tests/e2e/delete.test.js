@@ -6,12 +6,12 @@ const Position = require('../../models/position');
 const seeder = require('../../db/seeds');
 const config = require('../../utils/config');
 const {
-  login, uploadRanking, uploadFallRanking, timeout,
+  login, timeout,
 } = require('./helper');
 const rankingService = require('../../services/rankingService');
 const { getRankingBody } = require('../helpers/testHelpers');
 
-describe('When user goes to upload page ', () => {
+describe('deleting of ranking ', () => {
   let browser;
   let page;
 
@@ -26,34 +26,28 @@ describe('When user goes to upload page ', () => {
     page = await browser.newPage();
   });
 
-  describe('and is signed in', () => {
+  describe('when signed in', () => {
     beforeAll(async () => {
       await Ranking.remove({});
       await Position.remove({});
+      const body = getRankingBody();
+      await rankingService.createRanking(body);
       await page.goto('http://localhost:3003/#/signin');
       await login(page, process.env.ADMIN_USERNAME, process.env.ADMIN_PASSWORD);
+      await page.goto('http://localhost:3003/#/rankings');
     });
-
-    test(' ranking which is in spring can be created', async () => {
-      await uploadRanking(page);
-      await page.goto('http://localhost:3003/#/rankings');
+    test('is possible', async () => {
       await page.waitForSelector('#rankingList');
+      await page.waitForSelector('.delete');
+      await page.click('.delete');
+      await page.waitForSelector('#noRankings');
       const textContent = await page.$eval('body', el => el.textContent);
-      const includes = textContent.includes('Puppeteer Competition');
-      expect(includes).toBeTruthy();
-    }, timeout);
-
-    test(' ranking which is in fall can be created', async () => {
-      await uploadFallRanking(page);
-      await page.goto('http://localhost:3003/#/rankings');
-      await page.waitForSelector('#rankingList');
-      const textContent = await page.$eval('body', el => el.textContent);
-      const includes = textContent.includes('Fall Competition');
+      const includes = textContent.includes('No rankings saved to database yet');
       expect(includes).toBeTruthy();
     }, timeout);
   });
 
-  describe(' and is not signed in', () => {
+  describe('when not signed in', () => {
     beforeAll(async () => {
       await Ranking.remove({});
       await Position.remove({});
@@ -63,11 +57,11 @@ describe('When user goes to upload page ', () => {
       await page.waitForSelector('#logOut');
       await page.click('#logOut');
     });
-
-    test(' loading files is not possible', async () => {
-      await page.goto('http://localhost:3003/#/upload');
+    test('is not possible', async () => {
+      await page.goto('http://localhost:3003/#/rankings');
+      await page.waitForSelector('#rankingList');
       const textContent = await page.$eval('body', el => el.textContent);
-      const includes = textContent.includes('excel');
+      const includes = textContent.includes('Delete');
       expect(includes).toBeFalsy();
     }, timeout);
   });

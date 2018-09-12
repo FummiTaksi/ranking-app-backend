@@ -3,8 +3,7 @@ const playerService = require('./playerService');
 const positionService = require('./positionService');
 const dateService = require('./dateService');
 
-const convertColumnToRankingObject = (column) => {
-  const nameString = 'Pelaajalla pitää olla vähintään yksi kisatulos (Kevät-18 tai Syksy-17) jotta näkyisi tällä listalla';
+const convertColumnToRankingObject = (column, nameString) => {
   const positionString = '__EMPTY';
   const clubString = '__EMPTY_3';
   const ratingString = '__EMPTY_4';
@@ -51,7 +50,7 @@ const returnPositionList = async (rankingJson, rankingId, date) => {
         allPlayersSaved = true;
         return positionList;
       }
-      const positionBody = convertColumnToRankingObject(element);
+      const positionBody = convertColumnToRankingObject(element, nameString);
       positionBody.ranking = rankingId;
       positionBody.date = date;
       const savedPosition = await positionService.createPosition(positionBody);

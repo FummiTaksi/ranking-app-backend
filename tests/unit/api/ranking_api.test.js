@@ -32,7 +32,7 @@ const correctCredentials = () => {
   return {
     rankingFileBase64: base64,
     rankingName: 'Test Cup',
-    rankingDate: new Date(2018, 6, 15),
+    rankingDate: new Date(2018, 5, 15),
   };
 };
 

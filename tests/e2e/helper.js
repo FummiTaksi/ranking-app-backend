@@ -17,5 +17,20 @@ const uploadRanking = async (page) => {
   await page.click('button[type=submit]');
 };
 
+const uploadFallRanking = async (page) => {
+  await page.goto('http://localhost:3003/#/upload');
+  await page.waitForSelector('#fileDrop');
+  const fileEle = await page.$('input[type="file"]');
+  await page.waitForSelector('#fileDrop');
+  await fileEle.uploadFile('./tests/helpers/rating-files/fall/TestRatingFileFall.xls');
+  await page.waitForSelector('form');
+  await page.type('input[name=rankingName]', 'Fall Competition');
+  await page.type('input[name=rankingDate]', '07.07.2018');
+  await page.waitForSelector('button[type=submit]');
+  await page.click('button[type=submit]');
+};
+
 const timeout = 200000;
-module.exports = { login, uploadRanking, timeout };
+module.exports = {
+  login, uploadRanking, uploadFallRanking, timeout,
+};
