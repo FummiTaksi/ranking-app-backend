@@ -36,7 +36,7 @@ const getRankingBody = () => {
 };
 
 const getRatingBase64 = () => {
-  const result = fs.readFileSync('./tests/helpers/TestRatingFile.txt', 'utf8');
+  const result = fs.readFileSync('./tests/helpers/rating-files/spring/TestRatingFile.txt', 'utf8');
   return result;
 };
 
