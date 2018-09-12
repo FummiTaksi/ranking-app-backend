@@ -1,5 +1,6 @@
 const supertest = require('supertest');
 const { app, server } = require('../../../index');
+const { apiTestTimeout } = require('../../helpers/testHelpers');
 const User = require('../../../models/user');
 const seeder = require('../../../db/seeds');
 
@@ -15,13 +16,13 @@ describe('When app is running', () => {
     await api
       .get('/')
       .expect(200);
-  }, 10000);
+  }, apiTestTimeout);
 
   test(' admin is created successfully', async () => {
     const users = await User.find({});
     expect(users.length).toEqual(1);
     expect(users[0].username).toEqual(process.env.ADMIN_USERNAME);
-  }, 10000);
+  }, apiTestTimeout);
 });
 
 

@@ -2,6 +2,7 @@ const supertest = require('supertest');
 const { app, server } = require('../../../index');
 const seeder = require('../../../db/seeds');
 const User = require('../../../models/user');
+const { apiTestTimeout } = require('../../helpers/testHelpers');
 
 const api = supertest(app);
 
@@ -22,7 +23,7 @@ describe('/api/login', () => {
       .send(wrongCredentials)
       .expect(403)
       .expect('Content-Type', /application\/json/);
-  }, 10000);
+  }, apiTestTimeout);
   describe('with correct credentials ', async () => {
     const correctCredentials = {
       username: process.env.ADMIN_USERNAME,
@@ -33,11 +34,11 @@ describe('/api/login', () => {
         .post('/api/login')
         .send(correctCredentials)
         .expect(200);
-    }, 10000);
+    }, apiTestTimeout);
     test(' admin status is returned', async () => {
       const response = await api.post('/api/login').send(correctCredentials);
       expect(response.body.admin).toBe(true);
-    }, 10000);
+    }, apiTestTimeout);
   });
 });
 

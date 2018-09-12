@@ -2,7 +2,7 @@ const supertest = require('supertest');
 const { app, server } = require('../../../index');
 const User = require('../../../models/user');
 const seeder = require('../../../db/seeds');
-const { getRatingBase64, removePositionsAndRankingsAndPlayers } = require('../../helpers/testHelpers');
+const { getRatingBase64, removePositionsAndRankingsAndPlayers, apiTestTimeout } = require('../../helpers/testHelpers');
 
 const api = supertest(app);
 
@@ -51,7 +51,7 @@ describe('/api/ranking', () => {
         const response = await postNewRanking(correctCredentials(), 'bearer wrongtoken');
         expect(response.status).toEqual(400);
         expect(response.body.error).toEqual('You must be signed in admin to create new ranking!');
-      }, 10000);
+      }, apiTestTimeout);
       test(' body is missing rankingName', async () => {
         const missingRankingName = correctCredentials();
         missingRankingName.rankingName = undefined;
@@ -59,7 +59,7 @@ describe('/api/ranking', () => {
         const rankingResponse = await postNewRanking(missingRankingName, token);
         expect(rankingResponse.status).toEqual(400);
         expect(rankingResponse.body.error).toEqual('Ranking must have a name!');
-      }, 10000);
+      }, apiTestTimeout);
       test(' body is missing rankingDate', async () => {
         const missingRankingDate = correctCredentials();
         missingRankingDate.rankingDate = undefined;
@@ -67,7 +67,7 @@ describe('/api/ranking', () => {
         const rankingResponse = await postNewRanking(missingRankingDate, token);
         expect(rankingResponse.status).toEqual(400);
         expect(rankingResponse.body.error).toEqual('Ranking must have a date!');
-      }, 10000);
+      }, apiTestTimeout);
     });
 
     describe(' returns 200 when ', () => {
@@ -76,7 +76,7 @@ describe('/api/ranking', () => {
         const response = await postNewRanking(correctCredentials(), token);
         expect(response.status).toEqual(200);
         expect(response.body.ranking.competitionName).toEqual('Test Cup');
-      }, 10000);
+      }, apiTestTimeout);
     });
   });
 
@@ -89,14 +89,14 @@ describe('/api/ranking', () => {
       await postNewRanking(correctCredentials(), token);
       const response = await api.get('/api/ranking/').expect(200);
       expect(response.body.rankings.length).toEqual(1);
-    });
+    }, apiTestTimeout);
 
     test(' returns correct type of positions', async () => {
       const token = await getCorrectToken();
       await postNewRanking(correctCredentials(), token);
       const response = await api.get('/api/ranking/').expect(200);
       expect(response.body.rankings[0].positions[0].playerName).toEqual('Ykkös Ykkönen');
-    });
+    }, apiTestTimeout);
 
     afterAll(async () => {
       await removePositionsAndRankingsAndPlayers();
@@ -113,7 +113,7 @@ describe('/api/ranking', () => {
         const response = await postNewRanking(correctCredentials(), token);
         const rankingId = response.body.ranking._id;
         await api.delete(`/api/ranking/${rankingId}`).set('Authorization', 'bearer wrongtoken ').expect(400);
-      }, 10000);
+      }, apiTestTimeout);
     });
     describe('when given correct credentials', () => {
       test('status is 200 and body contains deletedRanking', async () => {
@@ -122,7 +122,7 @@ describe('/api/ranking', () => {
         const rankingId = response.body.ranking._id;
         const deleteResponse = await api.delete(`/api/ranking/${rankingId}`).set('Authorization', `bearer ${token}`).expect(200);
         expect(deleteResponse.body.deletedRanking).toBeDefined();
-      });
+      }, apiTestTimeout);
     });
   });
 
@@ -135,7 +135,7 @@ describe('/api/ranking', () => {
         const token = await getCorrectToken();
         await postNewRanking(correctCredentials(), token);
         await api.get('/api/ranking/wrongId').expect(400);
-      }, 10000);
+      }, apiTestTimeout);
     });
     describe('when given correct credentials', () => {
       test('status is 200 and body contains correct ranking', async () => {
@@ -144,7 +144,7 @@ describe('/api/ranking', () => {
         const rankingId = response.body.ranking._id;
         const getResponse = await api.get(`/api/ranking/${rankingId}`).expect(200);
         expect(getResponse.body.ranking).toBeDefined();
-      });
+      }, apiTestTimeout);
     });
   });
 });

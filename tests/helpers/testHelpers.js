@@ -53,6 +53,8 @@ const seedRatingExcelToDatabase = async () => {
   await rankingService.saveRankingToDatabase(fileJson, body);
 };
 
+const apiTestTimeout = 10000;
+
 module.exports = {
   getPositionModelBody,
   getRankingBody,
@@ -61,4 +63,5 @@ module.exports = {
   removePositionsAndRankingsAndPlayers,
   getPlayerModelBody,
   seedRatingExcelToDatabase,
+  apiTestTimeout,
 };

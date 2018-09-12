@@ -2,7 +2,9 @@ const supertest = require('supertest');
 const { app, server } = require('../../../index');
 const Player = require('../../../models/player');
 const Position = require('../../../models/position');
-const { getPlayerModelBody, getPositionModelBody, removePositionsAndRankingsAndPlayers } = require('../../helpers/testHelpers');
+const {
+  getPlayerModelBody, getPositionModelBody, removePositionsAndRankingsAndPlayers, apiTestTimeout,
+} = require('../../helpers/testHelpers');
 
 const api = supertest(app);
 
@@ -61,15 +63,15 @@ describe('/api/players', () => {
       });
       test('status is 200', () => {
         expect(response.status).toEqual(200);
-      });
+      }, apiTestTimeout);
       test('has correct player information', () => {
         expect(player.name).toEqual(playerModel.name);
-      });
+      }, apiTestTimeout);
       test('player has correct position', () => {
         const { positions } = player;
         expect(positions.length).toEqual(1);
         expect(positions[0].rating).toEqual(positionModel.rating);
-      });
+      }, apiTestTimeout);
       afterAll(async () => {
         await removePositionsAndRankingsAndPlayers();
       });
@@ -84,10 +86,10 @@ describe('/api/players', () => {
       });
       test('status is 200', () => {
         expect(response.status).toEqual(200);
-      });
+      }, apiTestTimeout);
       test('player is null', () => {
         expect(player).toBeNull();
-      });
+      }, apiTestTimeout);
     });
     afterAll(async () => {
       await removePositionsAndRankingsAndPlayers();
