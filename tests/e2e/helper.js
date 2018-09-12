@@ -12,6 +12,7 @@ const uploadRanking = async (page) => {
   await fileEle.uploadFile('./tests/helpers/TestRatingFile.xls');
   await page.waitForSelector('form');
   await page.type('input[name=rankingName]', 'Puppeteer Competition');
+  await page.type('input[name=rankingDate]', '06.06.2018');
   await page.waitForSelector('button[type=submit]');
   await page.click('button[type=submit]');
 };
