@@ -24,7 +24,7 @@ describe('When user goes to upload page ', () => {
     await seeder.seedAdminToDataBase();
     browser = await puppeteer.launch({ args: ['--no-sandbox'] });
     page = await browser.newPage();
-  });
+  }, timeout);
 
   describe('and is signed in', () => {
     beforeAll(async () => {
@@ -32,7 +32,7 @@ describe('When user goes to upload page ', () => {
       await Position.remove({});
       await page.goto('http://localhost:3003/#/signin');
       await login(page, process.env.ADMIN_USERNAME, process.env.ADMIN_PASSWORD);
-    });
+    }, timeout);
 
     test(' ranking which is in spring can be created', async () => {
       await uploadRanking(page);
@@ -62,7 +62,7 @@ describe('When user goes to upload page ', () => {
       await page.goto('http://localhost:3003/#/');
       await page.waitForSelector('#logOut');
       await page.click('#logOut');
-    });
+    }, timeout);
 
     test(' loading files is not possible', async () => {
       await page.goto('http://localhost:3003/#/upload');
@@ -76,5 +76,5 @@ describe('When user goes to upload page ', () => {
     await browser.close();
     await User.remove({});
     await mongoose.connection.close();
-  });
+  }, timeout);
 });
