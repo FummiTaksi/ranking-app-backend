@@ -39,5 +39,8 @@
     "nodemon": "^1.18.4",
     "puppeteer": "^1.4.0",
     "supertest": "^3.0.0"
+  },
+  "engines": {
+    "node": "9.2.1"
   }
 }
