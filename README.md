@@ -9,3 +9,51 @@ Coverage of unit tests: [![Coverage Status](https://coveralls.io/repos/github/Fu
 [Working hour records:](https://docs.google.com/spreadsheets/d/1V7HlcqmnLazPMtnx6VOmoptp2m-XOXWnCsU-GU69V9w/edit?usp=sharing)
 
 [Link to frontend](https://github.com/FummiTaksi/ranking-app-frontend)
+
+
+# HOW TO RUN
+
+## PREREQUISITIES
+
+Homebrew,npm
+
+### Install mongodb-community
+
+````
+brew tap mongodb/brew
+brew install mongodb-community
+````
+
+
+
+
+## Start development
+
+With the correct .env file do the following from the root of the repository
+
+```
+npm install
+npm run watch
+```
+
+The application should open in localhost:3001
+
+## Running tests
+
+Run tests:
+
+```
+brew services start mongodb-community
+npm run test
+```
+
+Teardown:
+
+```
+brew services stop mongodb-community
+```
+
+
+
+
+
