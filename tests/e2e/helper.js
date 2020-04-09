@@ -4,36 +4,30 @@ const login = async (page, username, password) => {
   await page.click('button');
 };
 const timeout = 200000;
-const uploadRanking = async (page) => {
+
+const uploadRanking = async (page, filePath, rankingName, rankingDate) => {
   await page.goto('http://localhost:3003/#/upload');
   await page.waitForSelector('.success', { hidden: true }, timeout);
   await page.waitForSelector('#fileDrop');
   const fileEle = await page.$('input[type="file"]');
-  await page.waitForSelector('#fileDrop');
-  await fileEle.uploadFile('./tests/helpers/rating-files/spring/TestRatingFile.xls');
+  await fileEle.uploadFile(filePath);
   await page.waitForSelector('form');
-  await page.type('input[name=rankingName]', 'Puppeteer Competition');
-  await page.type('input[name=rankingDate]', '06.06.2018');
+  await page.type('input[name=rankingName]', rankingName);
+  await page.type('input[name=rankingDate]', rankingDate);
   await page.waitForSelector('button[type=submit]');
   await page.click('button[type=submit]');
   await page.waitForSelector('.success', timeout);
+};
+const uploadSpringRanking = async (page) => {
+  await uploadRanking(page, './tests/helpers/rating-files/spring/TestRatingFile.xls',
+    'Puppeteer Competition', '06.06.2018');
 };
 
 const uploadFallRanking = async (page) => {
-  await page.goto('http://localhost:3003/#/upload');
-  await page.waitForSelector('.success', { hidden: true }, timeout);
-  await page.waitForSelector('#fileDrop');
-  const fileEle = await page.$('input[type="file"]');
-  await page.waitForSelector('#fileDrop');
-  await fileEle.uploadFile('./tests/helpers/rating-files/fall/TestRatingFileFall.xls');
-  await page.waitForSelector('form');
-  await page.type('input[name=rankingName]', 'Fall Competition');
-  await page.type('input[name=rankingDate]', '07.07.2018');
-  await page.waitForSelector('button[type=submit]');
-  await page.click('button[type=submit]');
-  await page.waitForSelector('.success', timeout);
+  await uploadRanking(page, './tests/helpers/rating-files/fall/TestRatingFileFall.xls',
+    'Fall Competition', '07.07.2018');
 };
 
 module.exports = {
-  login, uploadRanking, uploadFallRanking, timeout,
+  login, uploadSpringRanking, uploadFallRanking, timeout,
 };

@@ -6,7 +6,7 @@ const Position = require('../../models/position');
 const seeder = require('../../db/seeds');
 const config = require('../../utils/config');
 const {
-  login, uploadRanking, uploadFallRanking, timeout,
+  login, uploadSpringRanking, uploadFallRanking, timeout,
 } = require('./helper');
 const rankingService = require('../../services/rankingService');
 const { getRankingBody } = require('../helpers/testHelpers');
@@ -35,7 +35,7 @@ describe('When user goes to upload page ', () => {
     }, timeout);
 
     test(' ranking which is in spring can be created', async () => {
-      await uploadRanking(page);
+      await uploadSpringRanking(page);
       await page.goto('http://localhost:3003/#/rankings');
       await page.waitForSelector('#rankingList');
       const textContent = await page.$eval('body', el => el.textContent);
