@@ -15,14 +15,7 @@ Coverage of unit tests: [![Coverage Status](https://coveralls.io/repos/github/Fu
 
 ## PREREQUISITIES
 
-Homebrew,npm
-
-### Install mongodb-community
-
-````
-brew tap mongodb/brew
-brew install mongodb-community
-````
+npm
 
 
 
@@ -40,18 +33,11 @@ The application should open in localhost:3001
 
 ## Running tests
 
-Run tests:
 
 ```
-brew services start mongodb-community
 npm run test
 ```
 
-Teardown:
-
-```
-brew services stop mongodb-community
-```
 
 
 
