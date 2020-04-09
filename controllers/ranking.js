@@ -46,7 +46,7 @@ rankingRouter.post('/new', async (request, response) => {
     const ranking = await rankingService.saveRankingToDatabase(json, body);
     return response.status(200).json({ message: 'Ranking was created successfully', ranking });
   } catch (error) {
-    console.log('ERROR', error);
+    console.log('ERROR WHEN CREATING RANKING', error);
     return response.status(400).json(getAccessDeniedMessage());
   }
 });
