@@ -2,7 +2,7 @@ Goals of this app: Offer tabletennis rankings in user readable form, and offer l
 
 [Link to app](https://tabletennis-ranking-app.herokuapp.com/)
 
-The dockerized mono-repo of this application is currently being developed in [https://github.com/FummiTaksi/ranking-app](https://github.com/FummiTaksi/ranking-app)
+The dockerized version of this application is currently being developed in [https://github.com/FummiTaksi/ranking-app](https://github.com/FummiTaksi/ranking-app)
 
 Travis build: [![Build Status](https://travis-ci.org/FummiTaksi/ranking-app-backend.svg?branch=master)](https://travis-ci.org/FummiTaksi/ranking-app-backend)
 
